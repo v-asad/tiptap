@@ -123,3 +123,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap.ProseMirror {
+  @apply focus:outline-none;
+}
