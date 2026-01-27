@@ -2,15 +2,23 @@ import { useMemo } from "react";
 import { NodeParams } from "./dnd.types";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
 import { useSlideEditorContext } from "../ctx/use-slide-editor";
+import { NodeName } from "../slides.utils";
 
-export const useDraggableNode = ({ getNodeInfo }: NodeParams) => {
+type UseDraggableNodeParams = NodeParams & {
+  type?: NodeName;
+};
+
+export const useDraggableNode = ({
+  getNodeInfo,
+  type,
+}: UseDraggableNodeParams) => {
   const draggableId = useMemo(() => crypto.randomUUID(), []);
 
   const {
     ref: draggableRef,
     handleRef,
     isDragging,
-  } = useDraggable({ id: draggableId });
+  } = useDraggable({ id: draggableId, type });
 
   const { setActiveNode } = useSlideEditorContext();
 

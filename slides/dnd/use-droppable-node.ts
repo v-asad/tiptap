@@ -3,8 +3,16 @@ import { Coords, NodeParams } from "./dnd.types";
 import { DropCursorPos, useSlideEditorContext } from "../ctx/use-slide-editor";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import { closestCenter } from "@dnd-kit/collision";
+import { NodeName } from "../slides.utils";
 
-export const useDroppableNode = ({ getNodeInfo }: NodeParams) => {
+type UseDroppableNodeParams = NodeParams & {
+  accept?: NodeName | NodeName[];
+};
+
+export const useDroppableNode = ({
+  getNodeInfo,
+  accept,
+}: UseDroppableNodeParams) => {
   const droppableId = useMemo(() => crypto.randomUUID(), []);
 
   const { editor, dropCursorPos, activeNode, setDropTarget, setDropCursorPos } =
@@ -17,10 +25,25 @@ export const useDroppableNode = ({ getNodeInfo }: NodeParams) => {
   } = useDroppable({
     id: droppableId,
     collisionDetector: closestCenter,
+    accept,
   });
 
   const findNearestEdge = ({ x, y }: Coords) => {
     const rect = droppable.shape?.boundingRectangle;
+
+    const nodeInfo = getNodeInfo();
+    if (!nodeInfo) return;
+
+    const { name, parentName } = nodeInfo;
+
+    let shouldAllowHorizontalDropzone = false;
+
+    switch (name) {
+      case "paragraph": {
+        if (parentName === "column") shouldAllowHorizontalDropzone = false;
+        shouldAllowHorizontalDropzone = true;
+      }
+    }
 
     if (!rect) return;
 
@@ -32,13 +55,15 @@ export const useDroppableNode = ({ getNodeInfo }: NodeParams) => {
     const bottom = Math.abs(y - rect.bottom);
     const left = Math.abs(x - rect.left) - horizontalThreshold;
 
-    const min = Math.min(top, bottom, left, right);
+    const min = shouldAllowHorizontalDropzone
+      ? Math.min(top, bottom, left, right)
+      : Math.min(top, bottom);
 
-    let edge: DropCursorPos = "LEFT";
+    let edge: DropCursorPos = "TOP";
 
-    if (min === top) edge = "TOP";
-    else if (min === right) edge = "RIGHT";
-    else if (min === bottom) edge = "BOTTOM";
+    if (min === right) edge = "RIGHT";
+    if (min === bottom) edge = "BOTTOM";
+    if (min === left) edge = "LEFT";
 
     setDropCursorPos(edge);
     setDropTarget(droppableId);
