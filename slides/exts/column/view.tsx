@@ -8,6 +8,7 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
     <DragDropNodeViewWrapper
       type={NodeName.COLUMN}
       accept={[NodeName.PARAGRAPH, NodeName.COLUMN]}
+      className="bg-yellow-200"
       {...props}
     >
       <NodeViewContent className="outline-none" />

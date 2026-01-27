@@ -36,19 +36,23 @@ export const useDroppableNode = ({
 
     const { name, parentName } = nodeInfo;
 
-    let shouldAllowHorizontalDropzone = false;
+    console.log(nodeInfo);
+
+    let shouldAllowHorizontalDropzone = true;
 
     switch (name) {
-      case "paragraph": {
-        if (parentName === "column") shouldAllowHorizontalDropzone = false;
-        shouldAllowHorizontalDropzone = true;
+      case NodeName.PARAGRAPH: {
+        if (parentName === NodeName.COLUMN)
+          shouldAllowHorizontalDropzone = false;
+        else shouldAllowHorizontalDropzone = true;
       }
     }
 
     if (!rect) return;
 
     const aspectRatio = rect.width / rect.height;
-    const horizontalThreshold = aspectRatio > 1 ? rect.width * 0.1 : 0;
+    const horizontalThreshold =
+      aspectRatio > 1 ? Math.min(50, rect.width * 0.1) : 0;
 
     const top = Math.abs(y - rect.top);
     const right = Math.abs(x - rect.right) - horizontalThreshold;
@@ -61,9 +65,10 @@ export const useDroppableNode = ({
 
     let edge: DropCursorPos = "TOP";
 
-    if (min === right) edge = "RIGHT";
     if (min === bottom) edge = "BOTTOM";
-    if (min === left) edge = "LEFT";
+
+    if (shouldAllowHorizontalDropzone && min === right) edge = "RIGHT";
+    if (shouldAllowHorizontalDropzone && min === left) edge = "LEFT";
 
     setDropCursorPos(edge);
     setDropTarget(droppableId);
