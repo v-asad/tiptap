@@ -5,6 +5,7 @@ import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
 
 import { GripVerticalIcon } from "lucide-react";
+import { useSlideEditorContext } from "../ctx/use-slide-editor";
 
 type DragDropNodeViewWrapperProps<T = HTMLElement> = Omit<
   ReactNodeViewProps<T>,
@@ -18,15 +19,34 @@ export function DragDropNodeViewWrapper<T = HTMLElement>({
   children,
   className,
 }: DragDropNodeViewWrapperProps<T>) {
+  const getNodeInfo = () => {
+    if (!editor) return null;
+
+    const pos = getPos();
+    if (pos === undefined || pos === null) return null;
+
+    const { doc } = editor.state;
+    const $pos = doc.resolve(pos);
+
+    const parent = $pos.parent;
+
+    return {
+      pos,
+      name: node.type.name,
+      size: node.nodeSize,
+      parentName: parent.type.name,
+    };
+  };
+
   const { droppableRef, isDropTarget, dropCursorPos } = useDroppableNode({
-    getPos: getPos,
-    size: node.nodeSize,
+    getNodeInfo,
   });
 
   const { draggableRef, handleRef, isDragging } = useDraggableNode({
-    getPos: getPos,
-    size: node.nodeSize,
+    getNodeInfo,
   });
+
+  const { editor } = useSlideEditorContext();
 
   return (
     <NodeViewWrapper ref={droppableRef}>

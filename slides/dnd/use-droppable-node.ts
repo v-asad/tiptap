@@ -4,7 +4,7 @@ import { DropCursorPos, useSlideEditorContext } from "../ctx/use-slide-editor";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import { closestCenter } from "@dnd-kit/collision";
 
-export const useDroppableNode = ({ getPos, size }: NodeParams) => {
+export const useDroppableNode = ({ getNodeInfo }: NodeParams) => {
   const droppableId = useMemo(() => crypto.randomUUID(), []);
 
   const { editor, dropCursorPos, activeNode, setDropTarget, setDropCursorPos } =
@@ -48,8 +48,10 @@ export const useDroppableNode = ({ getPos, size }: NodeParams) => {
     if (!editor) return;
     if (!activeNode) return;
 
-    let targetPos = getPos();
-    if (targetPos === null || targetPos === undefined) return;
+    const nodeInfo = getNodeInfo();
+    if (nodeInfo === null) return;
+
+    let targetPos = nodeInfo.pos;
 
     const sourceNode = editor.state.doc.nodeAt(activeNode.pos);
     if (!sourceNode) return;
@@ -60,7 +62,11 @@ export const useDroppableNode = ({ getPos, size }: NodeParams) => {
     const tr = editor.state.tr;
 
     const insertionOffset =
-      dropCursorPos === "TOP" ? 0 : dropCursorPos === "BOTTOM" ? size : 0;
+      dropCursorPos === "TOP"
+        ? 0
+        : dropCursorPos === "BOTTOM"
+          ? nodeInfo.size
+          : 0;
 
     tr.delete(activeNode.pos, activeNode.pos + activeNode.size);
     tr.insert(targetPos + insertionOffset, sourceNode);

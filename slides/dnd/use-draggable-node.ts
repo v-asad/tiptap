@@ -3,7 +3,7 @@ import { NodeParams } from "./dnd.types";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
 import { useSlideEditorContext } from "../ctx/use-slide-editor";
 
-export const useDraggableNode = ({ getPos, size }: NodeParams) => {
+export const useDraggableNode = ({ getNodeInfo }: NodeParams) => {
   const draggableId = useMemo(() => crypto.randomUUID(), []);
 
   const {
@@ -18,10 +18,11 @@ export const useDraggableNode = ({ getPos, size }: NodeParams) => {
     onDragStart({ operation: { source } }) {
       if (source?.id !== draggableId) return;
 
-      const pos = getPos();
-      if (pos === undefined || pos === null) return;
+      const nodeInfo = getNodeInfo();
 
-      setActiveNode({ pos, size });
+      if (nodeInfo === null) return;
+
+      setActiveNode({ pos: nodeInfo.pos, size: nodeInfo.size });
     },
   });
 
