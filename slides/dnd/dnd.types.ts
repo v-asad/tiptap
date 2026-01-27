@@ -1,10 +1,12 @@
 export type Coords = { x: number; y: number };
 
+export type NodeInfo = {
+  pos: number;
+  name: string;
+  size: number;
+  parentName: string;
+};
+
 export type NodeParams = {
-  getNodeInfo: () => {
-    pos: number;
-    name: string;
-    size: number;
-    parentName: string;
-  } | null;
+  getNodeInfo: () => NodeInfo | null;
 };

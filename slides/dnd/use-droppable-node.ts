@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Coords, NodeParams } from "./dnd.types";
+import { Coords, NodeInfo, NodeParams } from "./dnd.types";
 import { DropCursorPos, useSlideEditorContext } from "../ctx/use-slide-editor";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import { closestCenter } from "@dnd-kit/collision";
@@ -7,6 +7,19 @@ import { NodeName } from "../slides.utils";
 
 type UseDroppableNodeParams = NodeParams & {
   accept?: NodeName | NodeName[];
+};
+
+const shouldAllowHorizontalDropCursors = (nodeInfo: NodeInfo | null) => {
+  if (!nodeInfo) return false;
+
+  if (
+    nodeInfo.name === NodeName.PARAGRAPH ||
+    nodeInfo.name === NodeName.HEADING
+  ) {
+    return nodeInfo.parentName === NodeName.DOC;
+  }
+
+  return true;
 };
 
 export const useDroppableNode = ({
@@ -31,22 +44,8 @@ export const useDroppableNode = ({
   const findNearestEdge = ({ x, y }: Coords) => {
     const rect = droppable.shape?.boundingRectangle;
 
-    const nodeInfo = getNodeInfo();
-    if (!nodeInfo) return;
-
-    const { name, parentName } = nodeInfo;
-
-    console.log(nodeInfo);
-
-    let shouldAllowHorizontalDropzone = true;
-
-    switch (name) {
-      case NodeName.PARAGRAPH: {
-        if (parentName === NodeName.COLUMN)
-          shouldAllowHorizontalDropzone = false;
-        else shouldAllowHorizontalDropzone = true;
-      }
-    }
+    const showHorizontalDropCursors =
+      shouldAllowHorizontalDropCursors(getNodeInfo());
 
     if (!rect) return;
 
@@ -59,7 +58,7 @@ export const useDroppableNode = ({
     const bottom = Math.abs(y - rect.bottom);
     const left = Math.abs(x - rect.left) - horizontalThreshold;
 
-    const min = shouldAllowHorizontalDropzone
+    const min = showHorizontalDropCursors
       ? Math.min(top, bottom, left, right)
       : Math.min(top, bottom);
 
@@ -67,8 +66,8 @@ export const useDroppableNode = ({
 
     if (min === bottom) edge = "BOTTOM";
 
-    if (shouldAllowHorizontalDropzone && min === right) edge = "RIGHT";
-    if (shouldAllowHorizontalDropzone && min === left) edge = "LEFT";
+    if (showHorizontalDropCursors && min === right) edge = "RIGHT";
+    if (showHorizontalDropCursors && min === left) edge = "LEFT";
 
     setDropCursorPos(edge);
     setDropTarget(droppableId);

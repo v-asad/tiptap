@@ -9,7 +9,7 @@ export const CustomParagraph = (
   return (
     <DragDropNodeViewWrapper
       type={NodeName.PARAGRAPH}
-      accept={NodeName.PARAGRAPH}
+      accept={[NodeName.PARAGRAPH, NodeName.HEADING]}
       className="bg-green-200"
       {...props}
     >
