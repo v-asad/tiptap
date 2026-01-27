@@ -1,9 +1,6 @@
 import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
 
-import {
-  DragDropNodeViewContent,
-  DragDropNodeViewProvider,
-} from "@/slides/dnd/dnd-node-view-wrapper";
+import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-node-view";
 import { NodeName } from "@/slides/slides.utils";
 
 import { DropCursor } from "@/slides/dnd/drop-cursor";
@@ -14,14 +11,13 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
     <DragDropNodeViewProvider
       type={NodeName.COLUMN}
       accept={[NodeName.PARAGRAPH, NodeName.COLUMN, NodeName.HEADING]}
+      className="bg-yellow-200"
       {...props}
     >
-      <DragDropNodeViewContent className="bg-yellow-200">
-        <DropCursor />
-        <DragHandle />
+      <DropCursor />
+      <DragHandle />
 
-        <NodeViewContent className="outline-none" />
-      </DragDropNodeViewContent>
+      <NodeViewContent className="outline-none" />
     </DragDropNodeViewProvider>
   );
 };

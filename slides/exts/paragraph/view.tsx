@@ -1,9 +1,6 @@
 import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
 
-import {
-  DragDropNodeViewContent,
-  DragDropNodeViewProvider,
-} from "@/slides/dnd/dnd-node-view-wrapper";
+import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-node-view";
 import { NodeName } from "@/slides/slides.utils";
 
 import { DropCursor } from "@/slides/dnd/drop-cursor";
@@ -16,14 +13,13 @@ export const CustomParagraph = (
     <DragDropNodeViewProvider
       type={NodeName.PARAGRAPH}
       accept={[NodeName.PARAGRAPH, NodeName.HEADING]}
+      className="bg-green-200"
       {...props}
     >
-      <DragDropNodeViewContent className="bg-green-200">
-        <DropCursor />
-        <DragHandle />
+      <DropCursor />
+      <DragHandle />
 
-        <NodeViewContent className="outline-none" />
-      </DragDropNodeViewContent>
+      <NodeViewContent className="outline-none" />
     </DragDropNodeViewProvider>
   );
 };

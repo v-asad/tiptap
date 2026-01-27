@@ -1,10 +1,5 @@
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
-import {
-  ComponentProps,
-  createContext,
-  PropsWithChildren,
-  useContext,
-} from "react";
+import { ComponentProps, createContext, useContext } from "react";
 import { useDroppableNode } from "./use-droppable-node";
 import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
@@ -15,8 +10,6 @@ import { NodeName } from "../slides.utils";
 type DragDropViewWrapperContext = {
   isDragging: boolean;
   isDropTarget: boolean;
-  droppableRef: (element: Element | null) => void;
-  draggableRef: (element: Element | null) => void;
   handleRef: (element: Element | null) => void;
 };
 
@@ -28,7 +21,7 @@ type DragDropNodeViewProviderProps<T = HTMLElement> = Omit<
   ReactNodeViewProps<T>,
   "ref"
 > &
-  PropsWithChildren & {
+  Omit<ComponentProps<"div">, "ref"> & {
     type?: NodeName;
     accept?: NodeName | NodeName[];
   };
@@ -39,6 +32,9 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
   type,
   accept,
   children,
+  className,
+
+  ...props
 }: DragDropNodeViewProviderProps<T>) {
   const { editor } = useSlideEditorContext();
 
@@ -71,17 +67,26 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
     type,
   });
 
+  const setRefs = (el: HTMLElement | null) => {
+    droppableRef(el);
+    draggableRef(el);
+  };
+
   return (
     <dragDropViewContext.Provider
       value={{
         isDragging,
         isDropTarget,
-        draggableRef,
-        droppableRef,
         handleRef,
       }}
     >
-      <NodeViewWrapper ref={droppableRef}>{children}</NodeViewWrapper>
+      <NodeViewWrapper
+        className={cn("relative p-4 group", className)}
+        ref={setRefs}
+        {...props}
+      >
+        {children}
+      </NodeViewWrapper>
     </dragDropViewContext.Provider>
   );
 }
@@ -94,22 +99,4 @@ export const useDragDropNodeView = () => {
     );
 
   return ctx;
-};
-
-export const DragDropNodeViewContent = ({
-  className,
-  children,
-  ...props
-}: ComponentProps<"div">) => {
-  const { draggableRef } = useDragDropNodeView();
-
-  return (
-    <div
-      className={cn("relative p-4 group", className)}
-      ref={draggableRef}
-      {...props}
-    >
-      {children}
-    </div>
-  );
 };

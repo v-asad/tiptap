@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 import { useSlideEditorContext } from "../ctx/use-slide-editor";
-import { useDragDropNodeView } from "./dnd-node-view-wrapper";
+import { useDragDropNodeView } from "./dnd-node-node-view";
 import { cn } from "@/lib/utils";
 
 export const DropCursor = ({ className, ...props }: ComponentProps<"div">) => {

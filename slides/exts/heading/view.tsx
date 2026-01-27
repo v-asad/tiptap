@@ -1,8 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  DragDropNodeViewContent,
-  DragDropNodeViewProvider,
-} from "@/slides/dnd/dnd-node-view-wrapper";
+import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-node-view";
 
 import { DragHandle } from "@/slides/dnd/drag-handle";
 import { DropCursor } from "@/slides/dnd/drop-cursor";
@@ -20,20 +17,17 @@ export const CustomHeading = (
     <DragDropNodeViewProvider
       type={NodeName.HEADING}
       accept={[NodeName.PARAGRAPH, NodeName.HEADING, NodeName.COLUMN]}
+      className={cn("bg-purple-200 font-medium ", {
+        "text-5xl": level === 1,
+        "text-3xl": level === 2,
+        "text-xl": level === 3,
+      })}
       {...props}
     >
-      <DragDropNodeViewContent
-        className={cn("bg-purple-200 font-medium ", {
-          "text-5xl": level === 1,
-          "text-3xl": level === 2,
-          "text-xl": level === 3,
-        })}
-      >
-        <DropCursor />
-        <DragHandle />
+      <DropCursor />
+      <DragHandle />
 
-        <NodeViewContent className="outline-none" />
-      </DragDropNodeViewContent>
+      <NodeViewContent className="outline-none" />
     </DragDropNodeViewProvider>
   );
 };
