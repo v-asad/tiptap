@@ -19,7 +19,7 @@ export const useDraggableNode = ({ getPos, size }: NodeParams) => {
       if (source?.id !== draggableId) return;
 
       const pos = getPos();
-      if (!pos) return;
+      if (pos === undefined || pos === null) return;
 
       setActiveNode({ pos, size });
     },
