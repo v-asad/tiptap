@@ -1,30 +1,47 @@
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
-import { ComponentProps } from "react";
+import {
+  ComponentProps,
+  createContext,
+  PropsWithChildren,
+  useContext,
+} from "react";
 import { useDroppableNode } from "./use-droppable-node";
 import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
 
-import { GripVerticalIcon } from "lucide-react";
 import { useSlideEditorContext } from "../ctx/use-slide-editor";
 import { NodeName } from "../slides.utils";
 
-type DragDropNodeViewWrapperProps<T = HTMLElement> = Omit<
+type DragDropViewWrapperContext = {
+  isDragging: boolean;
+  isDropTarget: boolean;
+  droppableRef: (element: Element | null) => void;
+  draggableRef: (element: Element | null) => void;
+  handleRef: (element: Element | null) => void;
+};
+
+const dragDropViewContext = createContext<
+  DragDropViewWrapperContext | undefined
+>(undefined);
+
+type DragDropNodeViewProviderProps<T = HTMLElement> = Omit<
   ReactNodeViewProps<T>,
   "ref"
 > &
-  Pick<ComponentProps<"div">, "className" | "children"> & {
+  PropsWithChildren & {
     type?: NodeName;
     accept?: NodeName | NodeName[];
   };
 
-export function DragDropNodeViewWrapper<T = HTMLElement>({
+export function DragDropNodeViewProvider<T = HTMLElement>({
   getPos,
   node,
-  children,
-  className,
   type,
   accept,
-}: DragDropNodeViewWrapperProps<T>) {
+  children,
+}: DragDropNodeViewProviderProps<T>) {
+  const { editor } = useSlideEditorContext();
+
   const getNodeInfo = () => {
     if (!editor) return null;
 
@@ -44,7 +61,7 @@ export function DragDropNodeViewWrapper<T = HTMLElement>({
     };
   };
 
-  const { droppableRef, isDropTarget, dropCursorPos } = useDroppableNode({
+  const { droppableRef, isDropTarget } = useDroppableNode({
     getNodeInfo,
     accept,
   });
@@ -54,39 +71,45 @@ export function DragDropNodeViewWrapper<T = HTMLElement>({
     type,
   });
 
-  const { editor } = useSlideEditorContext();
-
   return (
-    <NodeViewWrapper ref={droppableRef}>
-      <div className={cn("relative p-4 group", className)} ref={draggableRef}>
-        {isDragging ||
-          (isDropTarget && (
-            <div
-              className={cn(
-                "absolute bg-blue-500 transition-opacity duration-100",
-                {
-                  "top-0 left-0 w-full h-px": dropCursorPos === "TOP",
-                  "bottom-0 right-0 w-px h-full": dropCursorPos === "RIGHT",
-                  "bottom-0 right-0 w-full h-px": dropCursorPos === "BOTTOM",
-                  "top-0 left-0 w-px h-full": dropCursorPos === "LEFT",
-                },
-              )}
-            />
-          ))}
-
-        <GripVerticalIcon
-          className={cn(
-            "p-1 bg-white shadow rounded absolute top-1/2 -translate-y-1/2 -left-5 cursor-grab size-5",
-            {
-              inline: isDragging,
-              "hidden group-hover:inline": !isDragging,
-            },
-          )}
-          ref={handleRef}
-        />
-
-        {children}
-      </div>
-    </NodeViewWrapper>
+    <dragDropViewContext.Provider
+      value={{
+        isDragging,
+        isDropTarget,
+        draggableRef,
+        droppableRef,
+        handleRef,
+      }}
+    >
+      <NodeViewWrapper ref={droppableRef}>{children}</NodeViewWrapper>
+    </dragDropViewContext.Provider>
   );
 }
+
+export const useDragDropNodeView = () => {
+  const ctx = useContext(dragDropViewContext);
+  if (!ctx)
+    throw new Error(
+      "useDragDropNodeView should always be used within DragDropNodeViewProvider",
+    );
+
+  return ctx;
+};
+
+export const DragDropNodeViewContent = ({
+  className,
+  children,
+  ...props
+}: ComponentProps<"div">) => {
+  const { draggableRef } = useDragDropNodeView();
+
+  return (
+    <div
+      className={cn("relative p-4 group", className)}
+      ref={draggableRef}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
