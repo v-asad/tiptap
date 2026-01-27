@@ -1,18 +1,22 @@
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
-import { PropsWithChildren } from "react";
+import { ComponentProps } from "react";
 import { useDroppableNode } from "./use-droppable-node";
 import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
 
 import { GripVerticalIcon } from "lucide-react";
 
-type DragDropNodeViewWrapperProps<T = HTMLElement> = ReactNodeViewProps<T> &
-  PropsWithChildren;
+type DragDropNodeViewWrapperProps<T = HTMLElement> = Omit<
+  ReactNodeViewProps<T>,
+  "ref"
+> &
+  Pick<ComponentProps<"div">, "className" | "children">;
 
 export function DragDropNodeViewWrapper<T = HTMLElement>({
   getPos,
   node,
   children,
+  className,
 }: DragDropNodeViewWrapperProps<T>) {
   const { droppableRef, isDropTarget, dropCursorPos } = useDroppableNode({
     getPos: getPos,
@@ -26,7 +30,7 @@ export function DragDropNodeViewWrapper<T = HTMLElement>({
 
   return (
     <NodeViewWrapper ref={droppableRef}>
-      <div className="relative p-4 group" ref={draggableRef}>
+      <div className={cn("relative p-4 group", className)} ref={draggableRef}>
         {isDragging ||
           (isDropTarget && (
             <div
