@@ -1,5 +1,5 @@
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
-import { ComponentProps, createContext, useContext } from "react";
+import { ComponentProps, createContext, useContext, useMemo } from "react";
 import { useDroppableNode } from "./use-droppable-node";
 import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { NodeName } from "../slides.utils";
 import { useAcceptedNodes } from "./use-accepted-nodes";
 import { CollisionPriority } from "./dnd.types";
+import { isLeafNode } from "./dnd.utils";
 
 type DragDropViewWrapperContext = {
   type?: NodeName;
@@ -37,7 +38,11 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
 }: DragDropNodeViewProviderProps<T>) {
   const type = node.type.name as NodeName;
 
-  const { acceptedNodes } = useAcceptedNodes({ editor, getPos, node });
+  const { acceptedNodes, nodeName, parentName } = useAcceptedNodes({
+    editor,
+    getPos,
+    node,
+  });
 
   const getNodeInfo = () => {
     if (!editor) return null;
@@ -45,16 +50,14 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
     const pos = getPos();
     if (pos === undefined || pos === null) return null;
 
-    const { doc } = editor.state;
-    const $pos = doc.resolve(pos);
-
-    const parent = $pos.parent;
+    if (!nodeName) return null;
+    if (!parentName) return null;
 
     return {
       pos,
-      name: node.type.name as NodeName,
+      name: nodeName,
       size: node.nodeSize,
-      parentName: parent.type.name as NodeName,
+      parentName: parentName,
     };
   };
 
@@ -74,6 +77,11 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
     draggableRef(el);
   };
 
+  const isLeafAndInRoot = useMemo(() => {
+    if (!isLeafNode(nodeName)) return false;
+    return parentName === NodeName.DOC;
+  }, [nodeName, parentName]);
+
   return (
     <dragDropViewContext.Provider
       value={{
@@ -85,9 +93,13 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
     >
       <NodeViewWrapper
         className={cn(
-          "relative h-full",
-          // we use this identifier for drag handles
-          type ? `group/${type}` : "group",
+          "relative h-full my-1",
+          {
+            group: !type,
+            [`group/${type}`]: type,
+
+            "mx-6": isLeafAndInRoot,
+          },
           className,
         )}
         ref={setRefs}

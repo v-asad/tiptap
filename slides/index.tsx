@@ -8,9 +8,9 @@ export const SlideEditor = () => {
   const { editor } = useSlideEditorContext();
 
   return (
-    <div className="aspect-video max-w-7xl w-full shadow-2xl">
+    <div className="aspect-video max-w-7xl w-full shadow-2xl relative">
       <DnDProvider>
-        <EditorContent editor={editor} className="p-4" />
+        <EditorContent editor={editor} className="p-6" />
       </DnDProvider>
     </div>
   );

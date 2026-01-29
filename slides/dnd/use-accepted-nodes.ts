@@ -15,13 +15,13 @@ export const useAcceptedNodes = <T>({
   getPos,
   node,
 }: UseAcceptedNodesParams<T>) => {
-  const nodeName = useMemo(() => node.type.name, [node]);
+  const nodeName = useMemo(() => node.type.name as NodeName, [node]);
 
   const parentName = useMemo(() => {
     const pos = getPos();
     if (pos === undefined || pos === null) return null;
 
-    return editor.state.doc.resolve(pos).parent.type.name;
+    return editor.state.doc.resolve(pos).parent.type.name as NodeName;
   }, [getPos, editor]);
 
   const acceptedNodes = useMemo(() => {
@@ -40,5 +40,5 @@ export const useAcceptedNodes = <T>({
     }
   }, [nodeName, parentName]);
 
-  return { acceptedNodes };
+  return { acceptedNodes, nodeName, parentName };
 };

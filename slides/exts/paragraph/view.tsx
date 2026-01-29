@@ -12,7 +12,7 @@ export const CustomParagraph = (
   return (
     <DragDropNodeViewProvider
       collisionPriority={CollisionPriority.High}
-      className="p-1"
+      className="px-1 py-1"
       {...props}
     >
       <DropCursor />

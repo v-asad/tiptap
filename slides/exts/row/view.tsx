@@ -10,11 +10,11 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
   return (
     <DragDropNodeViewProvider
       collisionPriority={CollisionPriority.Low}
-      className="py-2 px-3"
+      className="my-4"
       {...props}
     >
       <DropCursor />
-      <DragHandle verticalAlign="center" />
+      <DragHandle />
 
       <NodeViewContent className="*:data-node-view-content-react:flex" />
     </DragDropNodeViewProvider>

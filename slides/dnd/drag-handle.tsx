@@ -25,7 +25,6 @@ type DragHandleProps = Omit<ComponentProps<typeof Button>, "ref"> & {
 export const DragHandle = ({
   className,
   pos = "left",
-  verticalAlign = "start",
   ...props
 }: DragHandleProps) => {
   const { isDragging, handleRef, type } = useDragDropNodeView();
@@ -39,11 +38,8 @@ export const DragHandle = ({
       className={cn(
         "cursor-grab inline-flex items-center justify-center bg-background",
         {
-          "absolute top-1.5 -left-5 w-5":
-            pos === "left" && verticalAlign === "start",
-          "absolute top-1/2 -translate-y-1/2 -left-5 w-5":
-            pos === "left" && verticalAlign === "center",
-          "absolute left-1/2 -translate-x-1/2 -top-4 h-5": pos === "top",
+          "absolute top-1 -left-5 w-5": pos === "left",
+          "absolute left-1/2 -translate-x-1/2 -top-2.5 h-5": pos === "top",
         },
         {
           flex: isDragging,
