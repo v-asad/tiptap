@@ -8,6 +8,7 @@ import { useSlideEditorContext } from "../ctx/use-slide-editor";
 import { NodeName } from "../slides.utils";
 
 type DragDropViewWrapperContext = {
+  type?: NodeName;
   isDragging: boolean;
   isDropTarget: boolean;
   handleRef: (element: Element | null) => void;
@@ -73,13 +74,19 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
   return (
     <dragDropViewContext.Provider
       value={{
+        type,
         isDragging,
         isDropTarget,
         handleRef,
       }}
     >
       <NodeViewWrapper
-        className={cn("relative p-4 group", className)}
+        className={cn(
+          "relative p-4",
+          // we use this identifier for drag handles
+          type ? `group/${type}` : "group",
+          className,
+        )}
         ref={setRefs}
       >
         {children}
