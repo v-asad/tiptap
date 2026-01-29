@@ -15,10 +15,10 @@ export const DropCursor = ({ className, ...props }: ComponentProps<"div">) => {
       className={cn(
         "absolute bg-blue-500 transition-opacity duration-100",
         {
-          "top-0 left-0 w-full h-px": dropCursorPos === "TOP",
-          "bottom-0 right-0 w-px h-full": dropCursorPos === "RIGHT",
-          "bottom-0 right-0 w-full h-px": dropCursorPos === "BOTTOM",
-          "top-0 left-0 w-px h-full": dropCursorPos === "LEFT",
+          "top-0 left-0 w-full h-1": dropCursorPos === "TOP",
+          "bottom-0 right-0 w-1 h-full": dropCursorPos === "RIGHT",
+          "bottom-0 right-0 w-full h-1": dropCursorPos === "BOTTOM",
+          "top-0 left-0 w-1 h-full": dropCursorPos === "LEFT",
         },
         className,
       )}

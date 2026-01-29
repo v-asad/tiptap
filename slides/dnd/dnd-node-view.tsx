@@ -4,8 +4,9 @@ import { useDroppableNode } from "./use-droppable-node";
 import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
 
-import { useSlideEditorContext } from "../ctx/use-slide-editor";
 import { NodeName } from "../slides.utils";
+import { useAcceptedNodes } from "./use-accepted-nodes";
+import { CollisionPriority } from "./dnd.types";
 
 type DragDropViewWrapperContext = {
   type?: NodeName;
@@ -23,19 +24,20 @@ type DragDropNodeViewProviderProps<T = HTMLElement> = Omit<
   "ref"
 > &
   Pick<ComponentProps<"div">, "className" | "children"> & {
-    type?: NodeName;
-    accept?: NodeName | NodeName[];
+    collisionPriority?: CollisionPriority;
   };
 
 export function DragDropNodeViewProvider<T = HTMLElement>({
   getPos,
   node,
-  type,
-  accept,
   children,
   className,
+  editor,
+  collisionPriority,
 }: DragDropNodeViewProviderProps<T>) {
-  const { editor } = useSlideEditorContext();
+  const type = node.type.name as NodeName;
+
+  const { acceptedNodes } = useAcceptedNodes({ editor, getPos, node });
 
   const getNodeInfo = () => {
     if (!editor) return null;
@@ -58,7 +60,8 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
 
   const { droppableRef, isDropTarget } = useDroppableNode({
     getNodeInfo,
-    accept,
+    accept: acceptedNodes,
+    collisionPriority,
   });
 
   const { draggableRef, handleRef, isDragging } = useDraggableNode({

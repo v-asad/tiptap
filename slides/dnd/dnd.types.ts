@@ -10,3 +10,11 @@ export type NodeInfo = {
 export type NodeParams = {
   getNodeInfo: () => NodeInfo | null;
 };
+
+export enum CollisionPriority {
+  Lowest = 0,
+  Low = 1,
+  Normal = 2,
+  High = 3,
+  Highest = 4,
+}

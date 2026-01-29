@@ -47,6 +47,18 @@ export const useTiptapEditor = () => {
           </p>
         </column>
       </row>
+      <row>
+        <column>
+          <p>
+            something xyz
+          </p>
+        </column>
+        <column>
+          <p>
+            something abc
+          </p>
+        </column>
+      </row>
     `,
     immediatelyRender: false,
   });

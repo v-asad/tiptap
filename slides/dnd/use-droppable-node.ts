@@ -1,12 +1,13 @@
 import { useMemo } from "react";
-import { Coords, NodeInfo, NodeParams } from "./dnd.types";
+import { CollisionPriority, Coords, NodeInfo, NodeParams } from "./dnd.types";
 import { DropCursorPos, useSlideEditorContext } from "../ctx/use-slide-editor";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
-import { closestCenter } from "@dnd-kit/collision";
+import { pointerIntersection } from "@dnd-kit/collision";
 import { NodeName } from "../slides.utils";
 
 type UseDroppableNodeParams = NodeParams & {
   accept?: NodeName | NodeName[];
+  collisionPriority?: CollisionPriority;
 };
 
 const shouldAllowHorizontalDropCursors = (nodeInfo: NodeInfo | null) => {
@@ -25,6 +26,7 @@ const shouldAllowHorizontalDropCursors = (nodeInfo: NodeInfo | null) => {
 export const useDroppableNode = ({
   getNodeInfo,
   accept,
+  collisionPriority = CollisionPriority.Normal,
 }: UseDroppableNodeParams) => {
   const droppableId = useMemo(() => crypto.randomUUID(), []);
 
@@ -37,7 +39,8 @@ export const useDroppableNode = ({
     isDropTarget,
   } = useDroppable({
     id: droppableId,
-    collisionDetector: closestCenter,
+    collisionDetector: pointerIntersection,
+    collisionPriority,
     accept,
   });
 
