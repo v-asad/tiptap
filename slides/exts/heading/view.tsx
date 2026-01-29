@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-node-view";
+import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-view";
 
 import { DragHandle } from "@/slides/dnd/drag-handle";
 import { DropCursor } from "@/slides/dnd/drop-cursor";

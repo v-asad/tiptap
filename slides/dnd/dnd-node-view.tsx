@@ -21,7 +21,7 @@ type DragDropNodeViewProviderProps<T = HTMLElement> = Omit<
   ReactNodeViewProps<T>,
   "ref"
 > &
-  Omit<ComponentProps<"div">, "ref"> & {
+  Pick<ComponentProps<"div">, "className" | "children"> & {
     type?: NodeName;
     accept?: NodeName | NodeName[];
   };
@@ -33,8 +33,6 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
   accept,
   children,
   className,
-
-  ...props
 }: DragDropNodeViewProviderProps<T>) {
   const { editor } = useSlideEditorContext();
 
@@ -83,7 +81,6 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
       <NodeViewWrapper
         className={cn("relative p-4 group", className)}
         ref={setRefs}
-        {...props}
       >
         {children}
       </NodeViewWrapper>

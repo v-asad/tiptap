@@ -1,5 +1,5 @@
 import { GripVerticalIcon } from "lucide-react";
-import { useDragDropNodeView } from "./dnd-node-node-view";
+import { useDragDropNodeView } from "./dnd-node-view";
 import { cn } from "@/lib/utils";
 import { ComponentProps } from "react";
 

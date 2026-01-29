@@ -1,6 +1,6 @@
 import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
 
-import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-node-view";
+import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-view";
 import { NodeName } from "@/slides/slides.utils";
 
 import { DropCursor } from "@/slides/dnd/drop-cursor";
