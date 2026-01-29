@@ -1,10 +1,10 @@
 import { Editor } from "@tiptap/core";
 import { DropCursorPos } from "../ctx/use-slide-editor";
 import { NodeName } from "../slides.utils";
-import { NodeInfo, NodeType } from "./dnd.types";
+import { BoundingRect, Coords, NodeInfo, NodeType } from "./dnd.types";
 import { Fragment } from "@tiptap/pm/model";
 
-type DropCursorPosAllowance = Record<DropCursorPos, boolean>;
+export type DropCursorPosAllowance = Record<DropCursorPos, boolean>;
 
 export const isLeafNode = (name: NodeName) => {
   switch (name) {
@@ -19,28 +19,68 @@ export const isLeafNode = (name: NodeName) => {
 
 export const getAllowedDropCursorPositions = (
   nodeInfo: NodeInfo | null,
+  sourceNodeType: NodeName,
 ): DropCursorPosAllowance => {
   if (!nodeInfo)
     return { TOP: false, RIGHT: false, BOTTOM: false, LEFT: false };
 
-  if (isLeafNode(nodeInfo.name)) return getLeafNodeDropCursorPos(nodeInfo);
+  if (isLeafNode(nodeInfo.name))
+    return getLeafNodeDropCursorPos(nodeInfo, sourceNodeType);
 
   if (nodeInfo.name === NodeName.COLUMN)
     return { TOP: false, RIGHT: true, BOTTOM: false, LEFT: true };
 
   if (nodeInfo.name === NodeName.ROW)
-    return { TOP: true, RIGHT: true, BOTTOM: true, LEFT: true };
+    return { TOP: true, RIGHT: false, BOTTOM: true, LEFT: false };
 
   return { TOP: false, RIGHT: false, BOTTOM: false, LEFT: false };
 };
 
-const getLeafNodeDropCursorPos = ({
-  parentName,
-}: NodeInfo): DropCursorPosAllowance => {
+const getLeafNodeDropCursorPos = (
+  { parentName }: NodeInfo,
+  sourceNodeType: NodeName,
+): DropCursorPosAllowance => {
   if (parentName === NodeName.DOC)
-    return { TOP: true, RIGHT: true, BOTTOM: true, LEFT: true };
+    if (sourceNodeType === NodeName.ROW)
+      return { TOP: true, RIGHT: false, BOTTOM: true, LEFT: false };
+    else return { TOP: true, RIGHT: true, BOTTOM: true, LEFT: true };
 
   return { TOP: true, RIGHT: false, BOTTOM: true, LEFT: false };
+};
+
+export const findNearestEdge = (
+  rect: BoundingRect | undefined,
+  { x, y }: Coords,
+  dropCursorPosAllowance: DropCursorPosAllowance,
+) => {
+  if (!rect) return;
+
+  const aspectRatio = rect.width / rect.height;
+  const horizontalThreshold =
+    aspectRatio > 1 ? Math.min(50, rect.width * 0.1) : 0;
+
+  const top = Math.abs(y - rect.top);
+  const right = Math.abs(x - rect.right) - horizontalThreshold;
+  const bottom = Math.abs(y - rect.bottom);
+  const left = Math.abs(x - rect.left) - horizontalThreshold;
+
+  const edgeDistancesToCompute = [];
+
+  if (dropCursorPosAllowance.TOP) edgeDistancesToCompute.push(top);
+  if (dropCursorPosAllowance.RIGHT) edgeDistancesToCompute.push(right);
+  if (dropCursorPosAllowance.BOTTOM) edgeDistancesToCompute.push(bottom);
+  if (dropCursorPosAllowance.LEFT) edgeDistancesToCompute.push(left);
+
+  const min = Math.min(...edgeDistancesToCompute);
+
+  let edge: DropCursorPos | null = null;
+
+  if (dropCursorPosAllowance.TOP && min === top) edge = "TOP";
+  if (dropCursorPosAllowance.RIGHT && min === right) edge = "RIGHT";
+  if (dropCursorPosAllowance.BOTTOM && min === bottom) edge = "BOTTOM";
+  if (dropCursorPosAllowance.LEFT && min === left) edge = "LEFT";
+
+  return edge;
 };
 
 export const getModdedSourceNode = (
