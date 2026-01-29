@@ -28,6 +28,6 @@ export const ColumnExt = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ColumnView);
+    return ReactNodeViewRenderer(ColumnView, { className: "grow flex-1" });
   },
 });

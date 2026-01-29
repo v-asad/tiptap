@@ -17,7 +17,7 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
       <DropCursor />
       <DragHandle />
 
-      <NodeViewContent className="outline-none" />
+      <NodeViewContent className="*:data-node-view-content-react:flex" />
     </DragDropNodeViewProvider>
   );
 };
