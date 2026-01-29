@@ -1,10 +1,12 @@
+import { NodeName } from "../slides.utils";
+
 export type Coords = { x: number; y: number };
 
 export type NodeInfo = {
   pos: number;
-  name: string;
+  name: NodeName;
   size: number;
-  parentName: string;
+  parentName: NodeName;
 };
 
 export type NodeParams = {

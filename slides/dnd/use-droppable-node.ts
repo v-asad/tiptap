@@ -1,26 +1,14 @@
 import { useMemo } from "react";
-import { CollisionPriority, Coords, NodeInfo, NodeParams } from "./dnd.types";
+import { CollisionPriority, Coords, NodeParams } from "./dnd.types";
 import { DropCursorPos, useSlideEditorContext } from "../ctx/use-slide-editor";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import { pointerIntersection } from "@dnd-kit/collision";
 import { NodeName } from "../slides.utils";
+import { getAllowedDropCursorPositions } from "./dnd.utils";
 
 type UseDroppableNodeParams = NodeParams & {
   accept?: NodeName | NodeName[];
   collisionPriority?: CollisionPriority;
-};
-
-const shouldAllowHorizontalDropCursors = (nodeInfo: NodeInfo | null) => {
-  if (!nodeInfo) return false;
-
-  if (
-    nodeInfo.name === NodeName.PARAGRAPH ||
-    nodeInfo.name === NodeName.HEADING
-  ) {
-    return nodeInfo.parentName === NodeName.DOC;
-  }
-
-  return true;
 };
 
 export const useDroppableNode = ({
@@ -47,8 +35,7 @@ export const useDroppableNode = ({
   const findNearestEdge = ({ x, y }: Coords) => {
     const rect = droppable.shape?.boundingRectangle;
 
-    const showHorizontalDropCursors =
-      shouldAllowHorizontalDropCursors(getNodeInfo());
+    const dropCursorPosAllowance = getAllowedDropCursorPositions(getNodeInfo());
 
     if (!rect) return;
 
@@ -61,19 +48,26 @@ export const useDroppableNode = ({
     const bottom = Math.abs(y - rect.bottom);
     const left = Math.abs(x - rect.left) - horizontalThreshold;
 
-    const min = showHorizontalDropCursors
-      ? Math.min(top, bottom, left, right)
-      : Math.min(top, bottom);
+    const edgeDistancesToCompute = [];
 
-    let edge: DropCursorPos = "TOP";
+    if (dropCursorPosAllowance.TOP) edgeDistancesToCompute.push(top);
+    if (dropCursorPosAllowance.RIGHT) edgeDistancesToCompute.push(right);
+    if (dropCursorPosAllowance.BOTTOM) edgeDistancesToCompute.push(bottom);
+    if (dropCursorPosAllowance.LEFT) edgeDistancesToCompute.push(left);
 
-    if (min === bottom) edge = "BOTTOM";
+    const min = Math.min(...edgeDistancesToCompute);
 
-    if (showHorizontalDropCursors && min === right) edge = "RIGHT";
-    if (showHorizontalDropCursors && min === left) edge = "LEFT";
+    let edge: DropCursorPos | null = null;
 
-    setDropCursorPos(edge);
-    setDropTarget(droppableId);
+    if (dropCursorPosAllowance.TOP && min === top) edge = "TOP";
+    if (dropCursorPosAllowance.RIGHT && min === right) edge = "RIGHT";
+    if (dropCursorPosAllowance.BOTTOM && min === bottom) edge = "BOTTOM";
+    if (dropCursorPosAllowance.LEFT && min === left) edge = "LEFT";
+
+    if (edge) {
+      setDropCursorPos(edge);
+      setDropTarget(droppableId);
+    }
   };
 
   const handleDragEnd = () => {
