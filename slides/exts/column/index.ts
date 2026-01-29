@@ -24,7 +24,7 @@ export const ColumnExt = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["react-component", mergeAttributes(HTMLAttributes)];
+    return ["column", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
