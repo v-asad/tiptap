@@ -4,7 +4,10 @@ import { DropCursorPos, useSlideEditorContext } from "../ctx/use-slide-editor";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import { pointerIntersection } from "@dnd-kit/collision";
 import { NodeName } from "../slides.utils";
-import { getAllowedDropCursorPositions } from "./dnd.utils";
+import {
+  getAllowedDropCursorPositions,
+  getModdedSourceNode,
+} from "./dnd.utils";
 
 type UseDroppableNodeParams = NodeParams & {
   accept?: NodeName | NodeName[];
@@ -77,7 +80,7 @@ export const useDroppableNode = ({
     const nodeInfo = getNodeInfo();
     if (nodeInfo === null) return;
 
-    let targetPos = nodeInfo.pos;
+    const targetPos = nodeInfo.pos;
 
     const sourceNode = editor.state.doc.nodeAt(activeNode.pos);
     if (!sourceNode) return;
@@ -97,11 +100,29 @@ export const useDroppableNode = ({
         break;
     }
 
+    const { moddedNode, deleteOriginalNode } = getModdedSourceNode(
+      editor,
+      dropCursorPos,
+      sourceNode,
+      {
+        ...nodeInfo,
+        pos: targetPos,
+      },
+    );
+
     tr.delete(activeNode.pos, activeNode.pos + activeNode.size);
 
-    targetPos = tr.mapping.map(targetPos + insertionOffset);
+    const targetPosWithOffset = tr.mapping.map(targetPos + insertionOffset);
 
-    tr.insert(targetPos, sourceNode);
+    tr.insert(targetPosWithOffset, moddedNode);
+
+    if (deleteOriginalNode) {
+      const targetPosAfterInsertion = tr.mapping.map(nodeInfo.pos);
+      tr.delete(
+        targetPosAfterInsertion,
+        targetPosAfterInsertion + nodeInfo.size,
+      );
+    }
 
     editor.view.dispatch(tr);
   };

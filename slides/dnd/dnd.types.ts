@@ -1,3 +1,4 @@
+import { Editor } from "@tiptap/core";
 import { NodeName } from "../slides.utils";
 
 export type Coords = { x: number; y: number };
@@ -20,3 +21,5 @@ export enum CollisionPriority {
   High = 3,
   Highest = 4,
 }
+
+export type NodeType = Editor["state"]["doc"];
