@@ -36,7 +36,7 @@ export const useAcceptedNodes = <T>({
         return [...LEAF_NODES, NodeName.COLUMN];
 
       case NodeName.ROW:
-        return [NodeName.ROW];
+        return [...LEAF_NODES, NodeName.ROW];
     }
   }, [nodeName, parentName]);
 
