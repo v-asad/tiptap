@@ -15,7 +15,7 @@ export const CustomHeading = (
 
   return (
     <DragDropNodeViewProvider
-      className={cn("bg-purple-200 font-medium", {
+      className={cn("font-medium p-1", {
         "text-5xl": level === 1,
         "text-3xl": level === 2,
         "text-xl": level === 3,

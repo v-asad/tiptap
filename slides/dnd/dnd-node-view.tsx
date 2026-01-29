@@ -85,7 +85,7 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
     >
       <NodeViewWrapper
         className={cn(
-          "relative p-4 h-full",
+          "relative h-full",
           // we use this identifier for drag handles
           type ? `group/${type}` : "group",
           className,

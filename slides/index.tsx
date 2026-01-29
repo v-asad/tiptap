@@ -10,7 +10,7 @@ export const SlideEditor = () => {
   return (
     <div className="aspect-video max-w-7xl w-full shadow-2xl">
       <DnDProvider>
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} className="p-4" />
       </DnDProvider>
     </div>
   );

@@ -8,7 +8,11 @@ import { CollisionPriority } from "@/slides/dnd/dnd.types";
 
 export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
   return (
-    <DragDropNodeViewProvider className="bg-yellow-200" collisionPriority={CollisionPriority.Low} {...props}>
+    <DragDropNodeViewProvider
+      collisionPriority={CollisionPriority.Low}
+      className="p-2"
+      {...props}
+    >
       <DropCursor />
       <DragHandle pos="top" />
 

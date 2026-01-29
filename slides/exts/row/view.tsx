@@ -9,12 +9,12 @@ import { CollisionPriority } from "@/slides/dnd/dnd.types";
 export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
   return (
     <DragDropNodeViewProvider
-      className="bg-red-200"
       collisionPriority={CollisionPriority.Low}
+      className="py-2 px-3"
       {...props}
     >
       <DropCursor />
-      <DragHandle />
+      <DragHandle verticalAlign="center" />
 
       <NodeViewContent className="*:data-node-view-content-react:flex" />
     </DragDropNodeViewProvider>

@@ -11,8 +11,8 @@ export const CustomParagraph = (
 ) => {
   return (
     <DragDropNodeViewProvider
-      className="bg-green-200"
       collisionPriority={CollisionPriority.High}
+      className="p-1"
       {...props}
     >
       <DropCursor />
