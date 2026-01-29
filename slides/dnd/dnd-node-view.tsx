@@ -52,9 +52,9 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
 
     return {
       pos,
-      name: node.type.name,
+      name: node.type.name as NodeName,
       size: node.nodeSize,
-      parentName: parent.type.name,
+      parentName: parent.type.name as NodeName,
     };
   };
 
