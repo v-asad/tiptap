@@ -85,9 +85,6 @@ export const useDroppableNode = ({
     const sourceNode = editor.state.doc.nodeAt(activeNode.pos);
     if (!sourceNode) return;
 
-    // If dragging DOWN, deletion happens before insertion point
-    if (activeNode.pos < targetPos) targetPos -= activeNode.size;
-
     const tr = editor.state.tr;
 
     const insertionOffset =
@@ -98,7 +95,10 @@ export const useDroppableNode = ({
           : 0;
 
     tr.delete(activeNode.pos, activeNode.pos + activeNode.size);
-    tr.insert(targetPos + insertionOffset, sourceNode);
+
+    targetPos = tr.mapping.map(targetPos + insertionOffset);
+
+    tr.insert(targetPos, sourceNode);
 
     editor.view.dispatch(tr);
   };
