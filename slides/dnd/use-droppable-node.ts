@@ -84,12 +84,18 @@ export const useDroppableNode = ({
 
     const tr = editor.state.tr;
 
-    const insertionOffset =
-      dropCursorPos === "TOP"
-        ? 0
-        : dropCursorPos === "BOTTOM"
-          ? nodeInfo.size
-          : 0;
+    let insertionOffset = 0;
+
+    switch (dropCursorPos) {
+      case "TOP":
+      case "LEFT":
+        insertionOffset = 0;
+        break;
+      case "RIGHT":
+      case "BOTTOM":
+        insertionOffset = nodeInfo.size;
+        break;
+    }
 
     tr.delete(activeNode.pos, activeNode.pos + activeNode.size);
 
