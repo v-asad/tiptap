@@ -15,7 +15,7 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
       {...props}
     >
       <DropCursor />
-      <DragHandle />
+      <DragHandle pos="top" />
 
       <NodeViewContent className="outline-none" />
     </DragDropNodeViewProvider>

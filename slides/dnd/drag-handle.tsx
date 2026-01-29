@@ -14,10 +14,17 @@ const hoverClassMap: Record<NodeName, string> = {
   [NodeName.DOC]: "",
 };
 
+type DragHandlePos = "top" | "left";
+
+type DragHandleProps = Omit<ComponentProps<typeof GripVerticalIcon>, "ref"> & {
+  pos?: DragHandlePos;
+};
+
 export const DragHandle = ({
   className,
+  pos = "left",
   ...props
-}: Omit<ComponentProps<typeof GripVerticalIcon>, "ref">) => {
+}: DragHandleProps) => {
   const { isDragging, handleRef, type } = useDragDropNodeView();
 
   if (!type) return null;
@@ -25,7 +32,13 @@ export const DragHandle = ({
   return (
     <GripVerticalIcon
       className={cn(
-        "p-1 bg-white shadow rounded absolute top-1/2 -translate-y-1/2 -left-5 cursor-grab size-5",
+        "p-1 bg-white shadow rounded cursor-grab size-5",
+        // Position configuration
+        {
+          "absolute top-1/2 -translate-y-1/2 -left-5": pos === "left",
+          "absolute left-1/2 -translate-x-1/2 -top-5": pos === "top",
+        },
+        // Visibility Configuration
         {
           inline: isDragging,
           hidden: !isDragging,
