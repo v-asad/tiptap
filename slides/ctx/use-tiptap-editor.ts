@@ -5,10 +5,11 @@ import { useEditor } from "@tiptap/react";
 import { ParagraphExt } from "../exts/paragraph";
 import { ColumnExt } from "../exts/column";
 import { HeadingExt } from "../exts/heading";
+import { RowExt } from "../exts/row";
 
 export const useTiptapEditor = () => {
   const editor = useEditor({
-    extensions: [Document, Text, ParagraphExt, HeadingExt, ColumnExt],
+    extensions: [Document, Text, ParagraphExt, HeadingExt, ColumnExt, RowExt],
     content: `
       <h1>Heading 1</h1>
       <p>
@@ -23,15 +24,20 @@ export const useTiptapEditor = () => {
           Another normal paragraph
         </p>
       </column>
-      <column>
-        <h3>Heading 3</h3>
-        <p>
-          Paragraph something
-        </p>
-        <p>
-          2- Another normal paragraph
-        </p>
-      </column>
+      <row>
+        <column>
+          <h3>Heading 3</h3>
+          <p>
+            Paragraph in Col 1
+          </p>
+        </column>
+        <column>
+          <h3>Heading 3</h3>
+          <p>
+            Paragraph in Col 2
+          </p>
+        </column>
+      </row>
     `,
     immediatelyRender: false,
   });

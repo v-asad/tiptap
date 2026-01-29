@@ -1,0 +1,33 @@
+import { mergeAttributes, Node } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+
+import { RowView } from "./view";
+import { NodeName } from "@/slides/slides.utils";
+
+export const RowExt = Node.create({
+  name: NodeName.ROW,
+
+  group: "block",
+
+  atom: true,
+
+  content: `${NodeName.COLUMN}+`,
+
+  draggable: false,
+
+  parseHTML() {
+    return [
+      {
+        tag: "row",
+      },
+    ];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ["row", mergeAttributes(HTMLAttributes)];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(RowView);
+  },
+});
