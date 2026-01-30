@@ -1,4 +1,4 @@
-import { useEditor } from "@tiptap/react";
+import { useEditor, type AnyExtension } from "@tiptap/react";
 
 import Text from "@tiptap/extension-text";
 
@@ -9,7 +9,13 @@ import { ColumnExt } from "../exts/column";
 import { RowExt } from "../exts/row";
 import { LinkExt } from "../exts/link";
 
-export const useTiptapEditor = () => {
+interface UseTiptapEditorOptions {
+  additionalExtensions?: AnyExtension[];
+}
+
+export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
+  const { additionalExtensions = [] } = options;
+
   const editor = useEditor({
     extensions: [
       DocumentExt,
@@ -19,26 +25,27 @@ export const useTiptapEditor = () => {
       ColumnExt,
       RowExt,
       LinkExt,
+      ...additionalExtensions,
     ],
     content: `
       <div>
-        <h1>Theme System Demo</h1>
+        <h1>Tiptap Editor Demo</h1>
         <p>
-          This editor supports dynamic themes. Try selecting different themes from the dropdown above.
+          This editor supports dynamic themes and slash commands. Type <strong>/</strong> to see available commands.
           Visit <a href="https://tiptap.dev">Tiptap</a> for more information.
         </p>
 
         <row>
           <column>
-            <h3>Features</h3>
+            <h3>Slash Commands</h3>
             <p>
-              Themes change background, text colors, and <a href="https://example.com">link styles</a> in real-time.
+              Type / at the start of a line to insert headings, links, dates, and more.
             </p>
           </column>
           <column>
-            <h2>Fonts</h2>
+            <h2>Themes</h2>
             <p>
-              Each theme can have different title and body fonts. The fonts are applied using CSS variables.
+              Switch themes from the dropdown to change colors and fonts instantly.
             </p>
             <p>
               Check out <a href="https://fonts.google.com">Google Fonts</a> for more options.
@@ -47,13 +54,7 @@ export const useTiptapEditor = () => {
           <column>
             <h3>Customizable</h3>
             <p>
-              Add more themes by editing the themes array.
-            </p>
-          </column>
-          <column>
-            <h3>Backend Ready</h3>
-            <p>
-              Replace the array with an API call when ready.
+              Add new commands by editing the commands array.
             </p>
           </column>
         </row>
@@ -70,6 +71,8 @@ export const useTiptapEditor = () => {
             </p>
           </column>
         </row>
+
+        <p></p>
       </div>
     `,
     immediatelyRender: false,
