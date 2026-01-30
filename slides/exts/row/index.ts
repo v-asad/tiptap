@@ -15,6 +15,10 @@ export const RowExt = Node.create({
 
   draggable: false,
 
+  selectable: false,
+
+  defining: false,
+
   parseHTML() {
     return [
       {
