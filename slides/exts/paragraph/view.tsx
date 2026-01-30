@@ -19,7 +19,7 @@ export const CustomParagraph = (
       <DropCursor />
       <NodeActions {...props} />
 
-      <NodeViewContent className="outline-none whitespace-pre-wrap" />
+      <NodeViewContent className="outline-none" />
     </DragDropNodeViewProvider>
   );
 };
