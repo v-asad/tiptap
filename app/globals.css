@@ -48,6 +48,15 @@
 
 :root {
   --radius: 0.625rem;
+
+  /* Editor Theme Variables (set dynamically via JS) */
+  --editor-bg: #ffffff;
+  --editor-secondary: #3b82f6;
+  --editor-text: #1f2937;
+  --editor-link: #2563eb;
+  --editor-title-font: "Inter", sans-serif;
+  --editor-body-font: "Inter", sans-serif;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -126,4 +135,74 @@
 
 .tiptap.ProseMirror {
   @apply focus:outline-none;
+}
+
+/* Editor Theme Styles */
+.editor-themed {
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  font-family: var(--editor-body-font);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.editor-themed h1,
+.editor-themed h2,
+.editor-themed h3,
+.editor-themed h4,
+.editor-themed h5,
+.editor-themed h6 {
+  color: var(--editor-text);
+  font-family: var(--editor-title-font);
+}
+
+.editor-themed h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.editor-themed h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.editor-themed h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.editor-themed p {
+  color: var(--editor-text);
+  font-family: var(--editor-body-font);
+  line-height: 1.6;
+}
+
+.editor-themed a {
+  color: var(--editor-link);
+  font-family: var(--editor-body-font);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.editor-themed a:hover {
+  opacity: 0.8;
+}
+
+/* Link mark specific styling */
+.editor-themed a.editor-link {
+  color: var(--editor-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* Selection styling */
+.editor-themed ::selection {
+  background-color: var(--editor-secondary);
+  color: white;
 }

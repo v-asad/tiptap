@@ -37,7 +37,7 @@ export const DragHandle = ({
     <span
       contentEditable={false}
       className={cn(
-        "cursor-grab inline-flex items-center justify-center bg-background rounded border",
+        "cursor-grab inline-flex items-center justify-center bg-background text-foreground rounded border",
         {
           "absolute top-1 -left-5 w-5 py-1": pos === "left",
           "absolute left-1/2 -translate-x-1/2 -top-2.5 h-5 px-1": pos === "top",

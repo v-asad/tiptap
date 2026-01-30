@@ -7,6 +7,7 @@ import { ParagraphExt } from "../exts/paragraph";
 import { HeadingExt } from "../exts/heading";
 import { ColumnExt } from "../exts/column";
 import { RowExt } from "../exts/row";
+import { LinkExt } from "../exts/link";
 
 export const useTiptapEditor = () => {
   const editor = useEditor({
@@ -17,40 +18,42 @@ export const useTiptapEditor = () => {
       HeadingExt,
       ColumnExt,
       RowExt,
+      LinkExt,
     ],
     content: `
       <div>
-        <h1>Heading 1</h1>
+        <h1>Theme System Demo</h1>
         <p>
-          This is a radically reduced version of Tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.
+          This editor supports dynamic themes. Try selecting different themes from the dropdown above.
+          Visit <a href="https://tiptap.dev">Tiptap</a> for more information.
         </p>
-        
+
         <row>
           <column>
-            <h3>Heading 3</h3>
+            <h3>Features</h3>
             <p>
-              Paragraph in Col 1
+              Themes change background, text colors, and <a href="https://example.com">link styles</a> in real-time.
             </p>
           </column>
           <column>
-            <h2>Heading 2</h2>
+            <h2>Fonts</h2>
             <p>
-              The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
+              Each theme can have different title and body fonts. The fonts are applied using CSS variables.
             </p>
             <p>
-              Another normal paragraph
-            </p>
-          </column>
-          <column>
-            <h3>Heading 3</h3>
-            <p>
-              Paragraph in Col 2
+              Check out <a href="https://fonts.google.com">Google Fonts</a> for more options.
             </p>
           </column>
           <column>
-            <h3>Heading 4</h3>
+            <h3>Customizable</h3>
             <p>
-              Paragraph in Col 2
+              Add more themes by editing the themes array.
+            </p>
+          </column>
+          <column>
+            <h3>Backend Ready</h3>
+            <p>
+              Replace the array with an API call when ready.
             </p>
           </column>
         </row>
@@ -58,12 +61,12 @@ export const useTiptapEditor = () => {
         <row>
           <column>
             <p>
-              something xyz
+              CSS variables make theming simple and performant.
             </p>
           </column>
           <column>
             <p>
-              something abc
+              Works with all <a href="https://tiptap.dev/docs/editor/extensions">Tiptap extensions</a>.
             </p>
           </column>
         </row>

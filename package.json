@@ -18,6 +18,7 @@
     "@tiptap/core": "^3.17.1",
     "@tiptap/extension-document": "^3.17.1",
     "@tiptap/extension-heading": "^3.17.1",
+    "@tiptap/extension-link": "^3.18.0",
     "@tiptap/extension-paragraph": "^3.17.1",
     "@tiptap/extension-text": "^3.17.1",
     "@tiptap/pm": "^3.18.0",
