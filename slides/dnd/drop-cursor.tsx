@@ -22,6 +22,7 @@ export const DropCursor = ({ className, ...props }: ComponentProps<"div">) => {
         },
         className,
       )}
+      contentEditable={false}
       {...props}
     />
   );

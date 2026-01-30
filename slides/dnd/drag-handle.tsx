@@ -34,6 +34,7 @@ export const DragHandle = ({
   return (
     <Button
       variant="outline"
+      contentEditable={false}
       size="icon-xs"
       className={cn(
         "cursor-grab inline-flex items-center justify-center bg-background",
