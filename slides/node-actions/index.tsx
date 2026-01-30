@@ -68,7 +68,12 @@ export function NodeActions<T>({
         />
       </PopoverAnchor>
 
-      <PopoverContent align="start" side="top" className="p-2">
+      <PopoverContent
+        contentEditable={false}
+        align="start"
+        side="top"
+        className="p-2"
+      >
         <Button
           size="icon-sm"
           variant="ghost"

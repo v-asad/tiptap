@@ -1,3 +1,5 @@
+import { ReactNodeViewProps } from "@tiptap/react";
+
 export enum NodeName {
   DOC = "doc",
   COLUMN = "column",
@@ -5,3 +7,13 @@ export enum NodeName {
   PARAGRAPH = "paragraph",
   HEADING = "heading",
 }
+
+export const getNodeAttributes = <T>({
+  getPos,
+  editor,
+}: Pick<ReactNodeViewProps<T>, "getPos" | "editor">) => {
+  const pos = getPos();
+  if (pos === null || pos === undefined) return null;
+
+  return editor.state.doc.resolve(pos);
+};

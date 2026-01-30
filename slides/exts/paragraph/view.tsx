@@ -19,7 +19,7 @@ export const CustomParagraph = (
       <DropCursor />
       <NodeActions {...props} />
 
-      <NodeViewContent className="outline-none" />
+      <NodeViewContent contentEditable className="outline-none" />
     </DragDropNodeViewProvider>
   );
 };

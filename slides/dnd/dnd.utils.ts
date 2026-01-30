@@ -3,6 +3,8 @@ import { DropCursorPos } from "../ctx/use-slide-editor";
 import { NodeName } from "../slides.utils";
 import { BoundingRect, Coords, NodeInfo, NodeType } from "./dnd.types";
 import { Fragment } from "@tiptap/pm/model";
+import { ROW_CONFIG } from "../exts/row/config";
+import { COL_CONFIG } from "../exts/column/config";
 
 export type DropCursorPosAllowance = Record<DropCursorPos, boolean>;
 
@@ -101,14 +103,20 @@ export const getModdedSourceNode = (
   // Case 1 => target: leaf, source: leaf
   if (isTargetNodeALeaf && isSourceNodeALeaf) {
     const targetNode = editor.state.doc.nodeAt(targetNodeInfo.pos);
-    const leftColumn = columnNodeType.create(null, targetNode);
+    const leftColumn = columnNodeType.create(
+      COL_CONFIG.DEFAULT_ATTRS,
+      targetNode,
+    );
 
-    const rightColumn = columnNodeType.create(null, sourceNode);
+    const rightColumn = columnNodeType.create(
+      COL_CONFIG.DEFAULT_ATTRS,
+      sourceNode,
+    );
 
     const columns = [leftColumn, rightColumn];
 
     const row = rowNodeType.create(
-      null,
+      ROW_CONFIG.DEFAULT_ATTRS,
       Fragment.fromArray(
         dropCursorPos === "RIGHT" ? columns : columns.reverse(),
       ),
@@ -119,19 +127,22 @@ export const getModdedSourceNode = (
 
   // Case 2 => target: branch, source: leaf
   if (!isTargetNodeALeaf && isSourceNodeALeaf) {
-    const column = columnNodeType.create(null, sourceNode);
+    const column = columnNodeType.create(COL_CONFIG.DEFAULT_ATTRS, sourceNode);
     return { moddedNode: column, deleteOriginalNode: false };
   }
 
   // Case 3 => target: leaf, source: branch
   if (isTargetNodeALeaf && !isSourceNodeALeaf) {
     const targetNode = editor.state.doc.nodeAt(targetNodeInfo.pos);
-    const leftColumn = columnNodeType.create(null, targetNode);
+    const leftColumn = columnNodeType.create(
+      COL_CONFIG.DEFAULT_ATTRS,
+      targetNode,
+    );
 
     const columns = [leftColumn, sourceNode];
 
     const row = rowNodeType.create(
-      null,
+      ROW_CONFIG.DEFAULT_ATTRS,
       Fragment.fromArray(
         dropCursorPos === "RIGHT" ? columns : columns.reverse(),
       ),

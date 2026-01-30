@@ -26,7 +26,7 @@ export const CustomHeading = (
       <DropCursor />
       <NodeActions {...props} />
 
-      <NodeViewContent className="outline-none" />
+      <NodeViewContent contentEditable className="outline-none" />
     </DragDropNodeViewProvider>
   );
 };
