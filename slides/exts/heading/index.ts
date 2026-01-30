@@ -10,7 +10,15 @@ export const HeadingExt = Heading.extend({
 
   content: "inline*",
 
+  group: "block",
+
   draggable: false,
+
+  atom: false,
+
+  isolating: false,
+
+  defining: true,
 
   addNodeView() {
     return ReactNodeViewRenderer(CustomHeading);

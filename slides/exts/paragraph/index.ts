@@ -10,9 +10,19 @@ export const ParagraphExt = Paragraph.extend({
 
   content: "inline*",
 
+  group: "block",
+
   draggable: false,
 
+  atom: false,
+
+  isolating: false,
+
+  defining: true,
+
   addNodeView() {
-    return ReactNodeViewRenderer(CustomParagraph);
+    return ReactNodeViewRenderer(CustomParagraph, {
+      contentDOMElementTag: "span",
+    });
   },
 });

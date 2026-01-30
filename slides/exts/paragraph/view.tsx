@@ -3,8 +3,9 @@ import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
 import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-view";
 
 import { DropCursor } from "@/slides/dnd/drop-cursor";
-import { DragHandle } from "@/slides/dnd/drag-handle";
 import { CollisionPriority } from "@/slides/dnd/dnd.types";
+
+import { NodeActions } from "@/slides/node-actions";
 
 export const CustomParagraph = (
   props: ReactNodeViewProps<HTMLParagraphElement>,
@@ -16,9 +17,9 @@ export const CustomParagraph = (
       {...props}
     >
       <DropCursor />
-      <DragHandle />
+      <NodeActions {...props} />
 
-      <NodeViewContent className="outline-none" />
+      <NodeViewContent className="outline-none whitespace-pre-wrap" />
     </DragDropNodeViewProvider>
   );
 };

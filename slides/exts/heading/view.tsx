@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
 import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-view";
 
-import { DragHandle } from "@/slides/dnd/drag-handle";
 import { DropCursor } from "@/slides/dnd/drop-cursor";
 import { CollisionPriority } from "@/slides/dnd/dnd.types";
 
 import { Level as HeadingLevel } from "@tiptap/extension-heading";
 import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
+import { NodeActions } from "@/slides/node-actions";
 
 export const CustomHeading = (
   props: ReactNodeViewProps<HTMLParagraphElement>,
@@ -24,7 +24,7 @@ export const CustomHeading = (
       {...props}
     >
       <DropCursor />
-      <DragHandle />
+      <NodeActions {...props} />
 
       <NodeViewContent className="outline-none" />
     </DragDropNodeViewProvider>

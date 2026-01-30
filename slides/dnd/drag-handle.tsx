@@ -1,4 +1,4 @@
-import { GripHorizontalIcon, GripVerticalIcon } from "lucide-react";
+import { EllipsisIcon, EllipsisVerticalIcon } from "lucide-react";
 import { useDragDropNodeView } from "./dnd-node-view";
 import { cn } from "@/lib/utils";
 import { ComponentProps } from "react";
@@ -20,39 +20,43 @@ type DragHandlePos = "top" | "left";
 type DragHandleProps = Omit<ComponentProps<typeof Button>, "ref"> & {
   pos?: DragHandlePos;
   verticalAlign?: "center" | "start";
+  shouldStayVisible?: boolean;
 };
 
 export const DragHandle = ({
   className,
   pos = "left",
+  shouldStayVisible = false,
   ...props
 }: DragHandleProps) => {
-  const { isDragging, handleRef, type } = useDragDropNodeView();
+  const { handleRef, type } = useDragDropNodeView();
 
   if (!type) return null;
 
   return (
-    <Button
-      variant="outline"
+    <span
       contentEditable={false}
-      size="icon-xs"
       className={cn(
-        "cursor-grab inline-flex items-center justify-center bg-background",
+        "cursor-grab inline-flex items-center justify-center bg-background rounded border",
         {
-          "absolute top-1 -left-5 w-5": pos === "left",
-          "absolute left-1/2 -translate-x-1/2 -top-2.5 h-5": pos === "top",
+          "absolute top-1 -left-5 w-5 py-1": pos === "left",
+          "absolute left-1/2 -translate-x-1/2 -top-2.5 h-5 px-1": pos === "top",
         },
         {
-          flex: isDragging,
-          hidden: !isDragging,
-          [hoverClassMap[type]]: !isDragging && hoverClassMap[type],
+          hidden: true,
+          [hoverClassMap[type]]: hoverClassMap[type],
+          flex: shouldStayVisible,
         },
         className,
       )}
       ref={handleRef}
       {...props}
     >
-      {pos === "left" ? <GripVerticalIcon /> : <GripHorizontalIcon />}
-    </Button>
+      {pos === "left" ? (
+        <EllipsisVerticalIcon className="size-4" />
+      ) : (
+        <EllipsisIcon className="size-4" />
+      )}
+    </span>
   );
 };
