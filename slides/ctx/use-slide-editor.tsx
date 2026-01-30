@@ -12,8 +12,6 @@ import {
 import { Editor as TiptapEditor } from "@tiptap/react";
 import { useTiptapEditor } from "./use-tiptap-editor";
 
-export type DropCursorPos = "TOP" | "RIGHT" | "BOTTOM" | "LEFT";
-
 type ActiveNode = {
   pos: number;
   size: number;
@@ -21,11 +19,6 @@ type ActiveNode = {
 
 type SlideEditorContext = {
   editor: TiptapEditor | null;
-
-  dropCursorPos: DropCursorPos;
-  setDropCursorPos: Dispatch<
-    SetStateAction<SlideEditorContext["dropCursorPos"]>
-  >;
 
   dropTarget?: string;
   setDropTarget: Dispatch<SetStateAction<SlideEditorContext["dropTarget"]>>;
@@ -39,9 +32,6 @@ const slideEditorContext = createContext<SlideEditorContext | undefined>(
 );
 
 export const SlideEditorProvider = (props: PropsWithChildren) => {
-  const [dropCursorPos, setDropCursorPos] =
-    useState<SlideEditorContext["dropCursorPos"]>("BOTTOM");
-
   const [dropTarget, setDropTarget] =
     useState<SlideEditorContext["dropTarget"]>();
 
@@ -54,8 +44,6 @@ export const SlideEditorProvider = (props: PropsWithChildren) => {
     <slideEditorContext.Provider
       value={{
         editor,
-        dropCursorPos,
-        setDropCursorPos,
         dropTarget,
         setDropTarget,
         activeNode,

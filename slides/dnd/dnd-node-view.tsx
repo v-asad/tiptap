@@ -1,18 +1,32 @@
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
-import { ComponentProps, createContext, useContext, useMemo } from "react";
+import {
+  ComponentProps,
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { useDroppableNode } from "./use-droppable-node";
 import { useDraggableNode } from "./use-draggable-node";
 import { cn } from "@/lib/utils";
 
 import { NodeName } from "../slides.utils";
 import { useAcceptedNodes } from "./use-accepted-nodes";
-import { CollisionPriority } from "./dnd.types";
+import { CollisionPriority, DropCursorPos } from "./dnd.types";
 import { isLeafNode } from "./dnd.utils";
 
 type DragDropViewWrapperContext = {
   type?: NodeName;
   isDragging: boolean;
   isDropTarget: boolean;
+
+  dropCursorPos: DropCursorPos | null;
+  setDropCursorPos: Dispatch<
+    SetStateAction<DragDropViewWrapperContext["dropCursorPos"]>
+  >;
+
   handleRef: (element: Element | null) => void;
 };
 
@@ -37,6 +51,10 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
   collisionPriority,
 }: DragDropNodeViewProviderProps<T>) {
   const type = node.type.name as NodeName;
+
+  const [dropCursorPos, setDropCursorPos] = useState<DropCursorPos | null>(
+    null,
+  );
 
   const { acceptedNodes, nodeName, parentName } = useAcceptedNodes({
     editor,
@@ -65,6 +83,9 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
     getNodeInfo,
     accept: acceptedNodes,
     collisionPriority,
+
+    dropCursorPos,
+    setDropCursorPos,
   });
 
   const { draggableRef, handleRef, isDragging } = useDraggableNode({
@@ -88,6 +109,8 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
         type,
         isDragging,
         isDropTarget,
+        dropCursorPos,
+        setDropCursorPos,
         handleRef,
       }}
     >

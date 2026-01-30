@@ -47,6 +47,12 @@ export const useTiptapEditor = () => {
               Paragraph in Col 2
             </p>
           </column>
+          <column>
+            <h3>Heading 4</h3>
+            <p>
+              Paragraph in Col 2
+            </p>
+          </column>
         </row>
 
         <row>

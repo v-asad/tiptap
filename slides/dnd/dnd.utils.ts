@@ -1,7 +1,12 @@
 import { Editor } from "@tiptap/core";
-import { DropCursorPos } from "../ctx/use-slide-editor";
 import { NodeName } from "../slides.utils";
-import { BoundingRect, Coords, NodeInfo, NodeType } from "./dnd.types";
+import {
+  BoundingRect,
+  Coords,
+  DropCursorPos,
+  NodeInfo,
+  NodeType,
+} from "./dnd.types";
 import { Fragment } from "@tiptap/pm/model";
 import { ROW_CONFIG } from "../exts/row/config";
 import { COL_CONFIG } from "../exts/column/config";
@@ -19,9 +24,22 @@ export const isLeafNode = (name: NodeName) => {
   }
 };
 
+const findRowChildCountUsingColumnPos = (
+  editor: Editor | null,
+  columnPos: number,
+): number => {
+  if (!editor) return 0;
+
+  const parent = editor.state.doc.resolve(columnPos).parent;
+  if (parent.type.name !== NodeName.ROW) return 0;
+
+  return parent.childCount;
+};
+
 export const getAllowedDropCursorPositions = (
   nodeInfo: NodeInfo | null,
   sourceNodeType: NodeName,
+  editor: Editor | null,
 ): DropCursorPosAllowance => {
   if (!nodeInfo)
     return { TOP: false, RIGHT: false, BOTTOM: false, LEFT: false };
@@ -29,8 +47,21 @@ export const getAllowedDropCursorPositions = (
   if (isLeafNode(nodeInfo.name))
     return getLeafNodeDropCursorPos(nodeInfo, sourceNodeType);
 
-  if (nodeInfo.name === NodeName.COLUMN)
-    return { TOP: false, RIGHT: true, BOTTOM: false, LEFT: true };
+  if (nodeInfo.name === NodeName.COLUMN) {
+    // check parent child count before allowing here
+    const childCountForThisRow = findRowChildCountUsingColumnPos(
+      editor,
+      nodeInfo.pos,
+    );
+
+    if (childCountForThisRow < ROW_CONFIG.MAX_COL_COUNT) {
+      console.log(childCountForThisRow, "ACCEPTING");
+      return { TOP: false, RIGHT: true, BOTTOM: false, LEFT: true };
+    } else {
+      console.log(childCountForThisRow, "REJECTING");
+      return { TOP: false, RIGHT: false, BOTTOM: false, LEFT: false };
+    }
+  }
 
   if (nodeInfo.name === NodeName.ROW)
     return { TOP: true, RIGHT: false, BOTTOM: true, LEFT: false };
@@ -87,7 +118,7 @@ export const findNearestEdge = (
 
 export const getModdedSourceNode = (
   editor: Editor,
-  dropCursorPos: DropCursorPos,
+  dropCursorPos: DropCursorPos | null,
   sourceNode: NodeType,
   targetNodeInfo: NodeInfo,
 ): { moddedNode: NodeType; deleteOriginalNode: boolean } => {

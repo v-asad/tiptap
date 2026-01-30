@@ -23,7 +23,7 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
 
       <div
         contentEditable={false}
-        className="group/col-control w-8 flex items-center justify-center h-full absolute left-0 top-0 z-2 -translate-x-1/2"
+        className="group/col-control w-4 flex items-center justify-center h-full absolute left-0 top-0 z-2 -translate-x-1/2"
       >
         <div
           contentEditable={false}

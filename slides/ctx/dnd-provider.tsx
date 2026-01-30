@@ -9,7 +9,7 @@ export const DnDProvider = (props: PropsWithChildren) => {
         PointerSensor.configure({
           activationConstraints: [
             new PointerActivationConstraints.Distance({
-              value: 5,
+              value: 1,
               tolerance: 10,
             }),
           ],

@@ -3,6 +3,8 @@ import { NodeName } from "../slides.utils";
 
 export type Coords = { x: number; y: number };
 
+export type DropCursorPos = "TOP" | "RIGHT" | "BOTTOM" | "LEFT";
+
 export type BoundingRect = {
   width: number;
   height: number;
