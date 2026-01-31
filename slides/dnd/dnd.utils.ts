@@ -55,10 +55,8 @@ export const getAllowedDropCursorPositions = (
     );
 
     if (childCountForThisRow < ROW_CONFIG.MAX_COL_COUNT) {
-      console.log(childCountForThisRow, "ACCEPTING");
       return { TOP: false, RIGHT: true, BOTTOM: false, LEFT: true };
     } else {
-      console.log(childCountForThisRow, "REJECTING");
       return { TOP: false, RIGHT: false, BOTTOM: false, LEFT: false };
     }
   }

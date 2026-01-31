@@ -1,4 +1,4 @@
-import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
+import { ReactNodeViewProps, useReactNodeView } from "@tiptap/react";
 
 import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-view";
 
@@ -11,10 +11,38 @@ import { getNodeAttributes, NodeName } from "@/slides/slides.utils";
 import { COL_CONFIG } from "../column/config";
 import { ROW_CONFIG } from "./config";
 import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
 
 export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
   const childCount = props.node.childCount;
+  const columnWidths = props.node.attrs.columnWidths;
+
   const shouldShowAddColButton = childCount < ROW_CONFIG.MAX_COL_COUNT;
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const { nodeViewContentRef } = useReactNodeView();
+
+  useEffect(() => {
+    if (nodeViewContentRef) nodeViewContentRef(contentRef.current);
+  }, [contentRef, nodeViewContentRef]);
+
+  useEffect(() => {
+    const contentContainer = contentRef.current;
+    if (!contentContainer) return;
+
+    const gridTemplateColumns: string = columnWidths.length
+      ? columnWidths.map((width: number) => `${width}fr`).join(" ")
+      : "1fr";
+
+    const [content] = contentContainer.children;
+    if (!content) return;
+
+    content.setAttribute(
+      "style",
+      `grid-template-columns: ${gridTemplateColumns};`,
+    );
+  }, [columnWidths, props.node.attrs.columnWidths]);
 
   const handleAddColumn = () => {
     const { editor, node } = props;
@@ -47,8 +75,11 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
       <DropCursor />
       <NodeActions {...props} />
 
-      <NodeViewContent
+      <div
+        ref={contentRef}
+        data-node-view-content=""
         className={cn(
+          "outline-none whitespace-normal",
           "*:grid *:auto-cols-fr *:grid-flow-col",
 
           // must hide resize handle for first column

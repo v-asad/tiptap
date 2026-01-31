@@ -9,7 +9,7 @@ import { HeadingExt } from "../exts/heading";
 import { ColumnExt } from "../exts/column";
 import { RowExt } from "../exts/row";
 import { LinkExt } from "../exts/link";
-import { titleLayout } from "../layouts";
+import { threeColumnLayout } from "../layouts";
 
 interface UseTiptapEditorOptions {
   additionalExtensions?: AnyExtension[];
@@ -32,7 +32,7 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
     ],
     content: {
       type: "doc",
-      content: titleLayout.content,
+      content: threeColumnLayout.content,
     },
     immediatelyRender: false,
   });
