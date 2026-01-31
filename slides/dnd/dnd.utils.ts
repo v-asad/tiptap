@@ -120,8 +120,19 @@ export const getModdedSourceNode = (
   sourceNode: NodeType,
   targetNodeInfo: NodeInfo,
 ): { moddedNode: NodeType; deleteOriginalNode: boolean } => {
-  if (dropCursorPos === "TOP" || dropCursorPos === "BOTTOM")
+  if (dropCursorPos === "TOP" || dropCursorPos === "BOTTOM") {
+    // For row nodes, explicitly copy with preserved columnWidths attribute
+    if (sourceNode.type.name === NodeName.ROW) {
+      const rowNodeType = editor.state.schema.nodes[NodeName.ROW];
+      const copiedRow = rowNodeType.create(
+        { columnWidths: sourceNode.attrs.columnWidths || [1, 1, 1] },
+        sourceNode.content,
+        sourceNode.marks,
+      );
+      return { moddedNode: copiedRow, deleteOriginalNode: false };
+    }
     return { moddedNode: sourceNode, deleteOriginalNode: false };
+  }
 
   const isTargetNodeALeaf = isLeafNode(targetNodeInfo.name);
   const isSourceNodeALeaf = isLeafNode(sourceNode.type.name as NodeName);
@@ -144,8 +155,9 @@ export const getModdedSourceNode = (
 
     const columns = [leftColumn, rightColumn];
 
+    // Create row with proper columnWidths for 2 columns
     const row = rowNodeType.create(
-      ROW_CONFIG.DEFAULT_ATTRS,
+      { columnWidths: [1, 1] },
       Fragment.fromArray(
         dropCursorPos === "RIGHT" ? columns : columns.reverse(),
       ),
@@ -170,8 +182,9 @@ export const getModdedSourceNode = (
 
     const columns = [leftColumn, sourceNode];
 
+    // Create row with proper columnWidths for 2 columns
     const row = rowNodeType.create(
-      ROW_CONFIG.DEFAULT_ATTRS,
+      { columnWidths: [1, 1] },
       Fragment.fromArray(
         dropCursorPos === "RIGHT" ? columns : columns.reverse(),
       ),

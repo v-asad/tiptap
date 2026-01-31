@@ -84,6 +84,10 @@ const column = (...children: JSONContent[]): JSONContent => ({
  */
 const row = (...columns: JSONContent[]): JSONContent => ({
   type: "row",
+  attrs: {
+    // Set equal widths for all columns (1fr each)
+    columnWidths: columns.map(() => 1),
+  },
   content: columns,
 });
 

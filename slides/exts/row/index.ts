@@ -23,7 +23,7 @@ export const RowExt = Node.create({
   addAttributes() {
     return {
       columnWidths: {
-        default: [1, 1, 1],
+        default: [],
       },
     };
   },

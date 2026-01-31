@@ -27,22 +27,10 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
     if (nodeViewContentRef) nodeViewContentRef(contentRef.current);
   }, [contentRef, nodeViewContentRef]);
 
-  useEffect(() => {
-    const contentContainer = contentRef.current;
-    if (!contentContainer) return;
-
-    const gridTemplateColumns: string = columnWidths.length
-      ? columnWidths.map((width: number) => `${width}fr`).join(" ")
-      : "1fr";
-
-    const [content] = contentContainer.children;
-    if (!content) return;
-
-    content.setAttribute(
-      "style",
-      `grid-template-columns: ${gridTemplateColumns};`,
-    );
-  }, [columnWidths, props.node.attrs.columnWidths]);
+  // Compute grid template columns from widths
+  const gridTemplateColumns: string = columnWidths?.length
+    ? columnWidths.map((width: number) => `${width}fr`).join(" ")
+    : "1fr";
 
   const handleAddColumn = () => {
     const { editor, node } = props;
@@ -61,8 +49,15 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
       newParagraph,
     );
 
+    // Update columnWidths array to include new column with default width of 1
+    const currentWidths = node.attrs.columnWidths || [];
+    const newColumnWidths = [...currentWidths, 1];
+
     const tr = editor.state.tr;
+    // First insert the new column
     tr.insert(pos + node.nodeSize - 1, newColumn);
+    // Then update the row's columnWidths attribute
+    tr.setNodeMarkup(pos, undefined, { columnWidths: newColumnWidths });
     editor.view.dispatch(tr);
   };
 
@@ -80,11 +75,13 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
         data-node-view-content=""
         className={cn(
           "outline-none whitespace-normal",
-          "*:grid *:auto-cols-fr *:grid-flow-col",
+          "*:grid *:grid-flow-col *:grid-cols-(--grid-cols)",
 
           // must hide resize handle for first column
           "*:*:first:[&_#resize-handle]:hidden!",
         )}
+        // Pass grid-template-columns via CSS variable to child
+        style={{ "--grid-cols": gridTemplateColumns } as React.CSSProperties}
         contentEditable={false}
       />
 
