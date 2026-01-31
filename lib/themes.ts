@@ -55,7 +55,7 @@ export const themes: EditorTheme[] = [
     bodyFont: "'Trebuchet MS', sans-serif",
   },
   {
-    name: "Custom 1",
+    name: "Midnight Pro",
     bgColor: "#0F172A",
     secondaryColor: "#A5B4FC",
     textColor: "#FFFFFF",
@@ -64,7 +64,7 @@ export const themes: EditorTheme[] = [
     bodyFont: "'Inter', sans-serif",
   },
   {
-    name: "Custom 2",
+    name: "Sepia",
     bgColor: "#FFFBEB",
     secondaryColor: "#78716C",
     textColor: "#1C1917",
@@ -73,7 +73,7 @@ export const themes: EditorTheme[] = [
     bodyFont: "'Source Sans Pro', sans-serif",
   },
   {
-    name: "Custom 3",
+    name: "Ocean Breeze",
     bgColor: "#F0FDFA",
     secondaryColor: "#64748B",
     textColor: "#0F172A",
@@ -82,7 +82,7 @@ export const themes: EditorTheme[] = [
     bodyFont: "'Poppins', sans-serif",
   },
   {
-    name: "Custom 4",
+    name: "Lavender Haze",
     bgColor: "#F5F3FF",
     secondaryColor: "#7C3AED",
     textColor: "#0F172A",
@@ -91,7 +91,7 @@ export const themes: EditorTheme[] = [
     bodyFont: "'Poppins', sans-serif",
   },
   {
-    name: "Custom 5",
+    name: "Carbon",
     bgColor: "#18181B",
     secondaryColor: "#71717A",
     textColor: "#FAFAFA",
@@ -100,7 +100,7 @@ export const themes: EditorTheme[] = [
     bodyFont: "'IBM Plex Sans', sans-serif",
   },
   {
-    name: "Custom 6",
+    name: "Sunrise",
     bgColor: "#FFFBF5",
     secondaryColor: "#EA580C",
     textColor: "#1C1917",
@@ -110,4 +110,4 @@ export const themes: EditorTheme[] = [
   },
 ];
 
-export const DEFAULT_THEME = themes[2];
+export const DEFAULT_THEME = themes[4];
