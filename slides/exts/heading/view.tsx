@@ -7,6 +7,7 @@ import { CollisionPriority } from "@/slides/dnd/dnd.types";
 import { Level as HeadingLevel } from "@tiptap/extension-heading";
 import { NodeViewContent, ReactNodeViewProps } from "@tiptap/react";
 import { NodeActions } from "@/slides/node-actions";
+import { NodePlaceholder } from "@/slides/node-placeholder";
 
 export const CustomHeading = (
   props: ReactNodeViewProps<HTMLParagraphElement>,
@@ -27,6 +28,8 @@ export const CustomHeading = (
       <NodeActions {...props} />
 
       <NodeViewContent contentEditable className="outline-none" />
+
+      {props.node.textContent.trim() === "" && <NodePlaceholder />}
     </DragDropNodeViewProvider>
   );
 };

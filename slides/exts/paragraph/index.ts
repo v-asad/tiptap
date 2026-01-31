@@ -21,8 +21,6 @@ export const ParagraphExt = Paragraph.extend({
   defining: true,
 
   addNodeView() {
-    return ReactNodeViewRenderer(CustomParagraph, {
-      contentDOMElementTag: "span",
-    });
+    return ReactNodeViewRenderer(CustomParagraph);
   },
 });

@@ -11,7 +11,7 @@ export const ColumnExt = Node.create({
 
   atom: true,
 
-  content: `(${NodeName.PARAGRAPH} | ${NodeName.HEADING})+`,
+  content: `block+`,
 
   draggable: false,
 

@@ -6,6 +6,7 @@ import { DropCursor } from "@/slides/dnd/drop-cursor";
 import { CollisionPriority } from "@/slides/dnd/dnd.types";
 
 import { NodeActions } from "@/slides/node-actions";
+import { NodePlaceholder } from "@/slides/node-placeholder";
 
 export const CustomParagraph = (
   props: ReactNodeViewProps<HTMLParagraphElement>,
@@ -20,6 +21,8 @@ export const CustomParagraph = (
       <NodeActions {...props} />
 
       <NodeViewContent contentEditable className="outline-none" />
+
+      {props.node.textContent.trim() === "" && <NodePlaceholder />}
     </DragDropNodeViewProvider>
   );
 };

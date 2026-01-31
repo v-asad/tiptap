@@ -1,6 +1,7 @@
 import { useEditor, type AnyExtension } from "@tiptap/react";
 
 import Text from "@tiptap/extension-text";
+import Focus from "@tiptap/extension-focus";
 
 import { DocumentExt } from "../exts/document";
 import { ParagraphExt } from "../exts/paragraph";
@@ -20,6 +21,7 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
     extensions: [
       DocumentExt,
       Text,
+      Focus,
       ParagraphExt,
       HeadingExt,
       ColumnExt,
