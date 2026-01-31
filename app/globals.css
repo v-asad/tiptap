@@ -202,3 +202,20 @@
   background-color: var(--editor-secondary);
   color: white;
 }
+
+/* Full-bleed image layout spacing */
+.editor-themed .ProseMirror:has([data-image-layout="full-left"]) {
+  padding-left: calc(50% + 1.5rem);
+}
+
+.editor-themed .ProseMirror:has([data-image-layout="full-right"]) {
+  padding-right: calc(50% + 1.5rem);
+}
+
+.editor-themed .ProseMirror:has([data-image-layout="full-top"]) {
+  padding-top: calc(12rem + 1.5rem);
+}
+
+.editor-themed .ProseMirror:has([data-image-layout="full-bottom"]) {
+  padding-bottom: calc(12rem + 1.5rem);
+}

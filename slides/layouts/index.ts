@@ -68,13 +68,24 @@ const emptyParagraph = (): JSONContent => ({
   type: "paragraph",
 });
 
+type ImageLayout =
+  | "default"
+  | "full-top"
+  | "full-bottom"
+  | "full-left"
+  | "full-right";
+
 /**
- * Creates an image node with optional src
+ * Creates an image node with optional src and layout
  * @param src - Optional image URL (null for placeholder)
+ * @param layout - Optional layout for full-bleed positioning
  */
-const image = (src: string | null = null): JSONContent => ({
+const image = (
+  src: string | null = null,
+  layout: ImageLayout = "default",
+): JSONContent => ({
   type: "image",
-  attrs: { src },
+  attrs: { src, layout },
 });
 
 /**
@@ -513,6 +524,142 @@ const imageGalleryLayout: SlideLayout = {
   content: [heading(1, "Gallery Title"), row(column(image()), column(image()), column(image()))],
 };
 
+// ============================================================================
+// Full-Width/Full-Height Image Layouts
+// ============================================================================
+
+/**
+ * Image Top Layout
+ *
+ * A layout with a full-width image at the top and content below.
+ *
+ * Structure:
+ * - Image (full-top, absolutely positioned)
+ * - Heading
+ * - Paragraph
+ */
+const imageTopLayout: SlideLayout = {
+  id: "image-top",
+  name: "Image Top",
+  description: "Full-width image at top with content below",
+  content: [
+    image(null, "full-top"),
+    heading(2, "Title"),
+    paragraph("Add your description here"),
+  ],
+};
+
+/**
+ * Image Bottom Layout
+ *
+ * A layout with content at the top and a full-width image at the bottom.
+ *
+ * Structure:
+ * - Heading
+ * - Paragraph
+ * - Image (full-bottom, absolutely positioned)
+ */
+const imageBottomLayout: SlideLayout = {
+  id: "image-bottom",
+  name: "Image Bottom",
+  description: "Content at top with full-width image below",
+  content: [
+    heading(2, "Title"),
+    paragraph("Add your description here"),
+    image(null, "full-bottom"),
+  ],
+};
+
+/**
+ * Full Image Left Layout
+ *
+ * A layout with a full-height image on the left and content on the right.
+ *
+ * Structure:
+ * - Image (full-left, absolutely positioned)
+ * - Heading + paragraphs (with left padding to avoid overlap)
+ */
+const fullImageLeftLayout: SlideLayout = {
+  id: "full-image-left",
+  name: "Full Image Left",
+  description: "Full-height image on left, content on right",
+  content: [
+    image(null, "full-left"),
+    heading(1, "Title"),
+    paragraph("Add your main content here."),
+    paragraph("Additional details can go in this paragraph."),
+  ],
+};
+
+/**
+ * Full Image Right Layout
+ *
+ * A layout with content on the left and a full-height image on the right.
+ *
+ * Structure:
+ * - Image (full-right, absolutely positioned)
+ * - Heading + paragraphs (with right padding to avoid overlap)
+ */
+const fullImageRightLayout: SlideLayout = {
+  id: "full-image-right",
+  name: "Full Image Right",
+  description: "Content on left, full-height image on right",
+  content: [
+    image(null, "full-right"),
+    heading(1, "Title"),
+    paragraph("Add your main content here."),
+    paragraph("Additional details can go in this paragraph."),
+  ],
+};
+
+/**
+ * Image Header Layout
+ *
+ * A layout with a full-width image header, title, and content.
+ *
+ * Structure:
+ * - Image (full-top, absolutely positioned)
+ * - Heading
+ * - Row with two text columns
+ */
+const imageHeaderLayout: SlideLayout = {
+  id: "image-header",
+  name: "Image Header",
+  description: "Full-width image header with title and columns",
+  content: [
+    image(null, "full-top"),
+    heading(1, "Section Title"),
+    row(
+      column(paragraph("Left column content")),
+      column(paragraph("Right column content")),
+    ),
+  ],
+};
+
+/**
+ * Image Footer Layout
+ *
+ * A layout with title, content, and a full-width image footer.
+ *
+ * Structure:
+ * - Heading
+ * - Row with two text columns
+ * - Image (full width footer)
+ */
+const imageFooterLayout: SlideLayout = {
+  id: "image-footer",
+  name: "Image Footer",
+  description: "Title and columns with full-width image footer",
+  content: [
+    heading(1, "Section Title"),
+    row(
+      column(paragraph("Left column content")),
+      column(paragraph("Right column content")),
+    ),
+    image(null, "full-bottom"),
+  ],
+};
+
 /**
  * Quote Layout
  *
@@ -593,6 +740,18 @@ export const layoutCategories: LayoutCategory[] = [
       threeImageColumnsLayout,
       fourImageColumnsLayout,
       imageGalleryLayout,
+    ],
+  },
+  {
+    id: "full-image",
+    name: "Full Image Layouts",
+    layouts: [
+      imageTopLayout,
+      imageBottomLayout,
+      fullImageLeftLayout,
+      fullImageRightLayout,
+      imageHeaderLayout,
+      imageFooterLayout,
     ],
   },
 ];
@@ -691,6 +850,13 @@ export {
   threeImageColumnsLayout,
   fourImageColumnsLayout,
   imageGalleryLayout,
+  // Full image layouts
+  imageTopLayout,
+  imageBottomLayout,
+  fullImageLeftLayout,
+  fullImageRightLayout,
+  imageHeaderLayout,
+  imageFooterLayout,
 };
 
 // Export helper functions for creating custom layouts

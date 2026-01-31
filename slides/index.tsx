@@ -24,11 +24,11 @@ export const SlideEditor = () => {
         <ThemeDropdown />
       </div>
 
-      <div className="editor-themed aspect-video w-full rounded-lg shadow-2xl">
+      <div className="editor-themed aspect-video w-full rounded-lg shadow-2xl relative overflow-hidden">
         <DnDProvider>
           <EditorContent
             editor={editor}
-            className="h-full flex flex-col justify-center *:p-6 *:focus:outline-none"
+            className="h-full flex flex-col justify-center *:p-6 *:focus:outline-none *:h-full"
           />
         </DnDProvider>
       </div>

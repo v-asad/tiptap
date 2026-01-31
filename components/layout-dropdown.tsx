@@ -2,7 +2,7 @@
 
 import { useSlideEditorContext } from "@/slides/ctx/use-slide-editor";
 import { layoutCategories, layouts, type SlideLayout } from "@/slides/layouts";
-import { LayoutGrid, ImageIcon, Type } from "lucide-react";
+import { LayoutGrid, ImageIcon, Type, Maximize } from "lucide-react";
 import { useState } from "react";
 import {
   Dialog,
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 const categoryIcons: Record<string, React.ReactNode> = {
   text: <Type className="size-4" />,
   image: <ImageIcon className="size-4" />,
+  "full-image": <Maximize className="size-4" />,
 };
 
 export function LayoutDropdown() {
