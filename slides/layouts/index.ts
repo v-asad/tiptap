@@ -69,6 +69,15 @@ const emptyParagraph = (): JSONContent => ({
 });
 
 /**
+ * Creates an image node with optional src
+ * @param src - Optional image URL (null for placeholder)
+ */
+const image = (src: string | null = null): JSONContent => ({
+  type: "image",
+  attrs: { src },
+});
+
+/**
  * Creates a column node containing the specified block nodes
  * @param children - Array of block nodes (headings, paragraphs, etc.)
  */
@@ -338,6 +347,172 @@ const blankLayout: SlideLayout = {
   ],
 };
 
+// ============================================================================
+// Image Layouts
+// ============================================================================
+
+/**
+ * Image and Text Layout
+ *
+ * A layout with image on the left and text on the right.
+ *
+ * Structure:
+ * - Row:
+ *   - Column 1: Image
+ *   - Column 2: Heading + paragraph
+ */
+const imageAndTextLayout: SlideLayout = {
+  id: "image-and-text",
+  name: "Image and Text",
+  description: "Image on the left, text on the right",
+  content: [
+    row(
+      column(image()),
+      column(heading(2, "Title"), paragraph("Add your description here")),
+    ),
+  ],
+};
+
+/**
+ * Text and Image Layout
+ *
+ * A layout with text on the left and image on the right.
+ *
+ * Structure:
+ * - Row:
+ *   - Column 1: Heading + paragraph
+ *   - Column 2: Image
+ */
+const textAndImageLayout: SlideLayout = {
+  id: "text-and-image",
+  name: "Text and Image",
+  description: "Text on the left, image on the right",
+  content: [
+    row(
+      column(heading(2, "Title"), paragraph("Add your description here")),
+      column(image()),
+    ),
+  ],
+};
+
+/**
+ * Title with Text and Image Layout
+ *
+ * A layout with a title, followed by text and image columns.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Row:
+ *   - Column 1: Paragraph
+ *   - Column 2: Image
+ */
+const titleTextImageLayout: SlideLayout = {
+  id: "title-text-image",
+  name: "Title with Text and Image",
+  description: "A title with text on the left and image on the right",
+  content: [
+    heading(1, "Section Title"),
+    row(
+      column(
+        paragraph(
+          "Add your main content here. This text will appear next to the image.",
+        ),
+      ),
+      column(image()),
+    ),
+  ],
+};
+
+/**
+ * Two Image Columns with Text Layout
+ *
+ * A layout with a title and two columns, each with an image and text.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Row:
+ *   - Column 1: Image + heading + paragraph
+ *   - Column 2: Image + heading + paragraph
+ */
+const twoImageColumnsLayout: SlideLayout = {
+  id: "two-image-columns",
+  name: "2 Image Columns",
+  description: "Title with two image-text columns",
+  content: [
+    heading(1, "Section Title"),
+    row(
+      column(image(), heading(3, "Caption 1"), paragraph("Description")),
+      column(image(), heading(3, "Caption 2"), paragraph("Description")),
+    ),
+  ],
+};
+
+/**
+ * Three Image Columns with Text Layout
+ *
+ * A layout with a title and three columns, each with an image and text.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Row:
+ *   - Column 1-3: Image + heading + paragraph
+ */
+const threeImageColumnsLayout: SlideLayout = {
+  id: "three-image-columns",
+  name: "3 Image Columns",
+  description: "Title with three image-text columns",
+  content: [
+    heading(1, "Section Title"),
+    row(
+      column(image(), heading(3, "Caption 1"), paragraph("Description")),
+      column(image(), heading(3, "Caption 2"), paragraph("Description")),
+      column(image(), heading(3, "Caption 3"), paragraph("Description")),
+    ),
+  ],
+};
+
+/**
+ * Four Image Columns with Text Layout
+ *
+ * A layout with a title and four columns, each with an image and text.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Row:
+ *   - Column 1-4: Image + heading + paragraph
+ */
+const fourImageColumnsLayout: SlideLayout = {
+  id: "four-image-columns",
+  name: "4 Image Columns",
+  description: "Title with four image-text columns",
+  content: [
+    heading(1, "Section Title"),
+    row(
+      column(image(), heading(3, "Caption 1"), paragraph("Description")),
+      column(image(), heading(3, "Caption 2"), paragraph("Description")),
+      column(image(), heading(3, "Caption 3"), paragraph("Description")),
+      column(image(), heading(3, "Caption 4"), paragraph("Description")),
+    ),
+  ],
+};
+
+/**
+ * Image Gallery Layout
+ *
+ * A layout with a title and three image columns (no text).
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Row:
+ *   - Column 1-3: Image only
+ */
+const imageGalleryLayout: SlideLayout = {
+  id: "image-gallery",
+  name: "Image Gallery",
+  description: "Title with three images in a row",
+  content: [heading(1, "Gallery Title"), row(column(image()), column(image()), column(image()))],
+};
+
 /**
  * Quote Layout
  *
@@ -378,22 +553,57 @@ const sectionHeaderLayout: SlideLayout = {
 // ============================================================================
 
 /**
- * Array of all available slide layouts.
+ * Layout category for grouping in UI
+ */
+export interface LayoutCategory {
+  id: string;
+  name: string;
+  layouts: SlideLayout[];
+}
+
+/**
+ * Array of all available slide layouts grouped by category.
+ */
+export const layoutCategories: LayoutCategory[] = [
+  {
+    id: "text",
+    name: "Text Layouts",
+    layouts: [
+      titleLayout,
+      titleOnlyLayout,
+      contentLayout,
+      twoColumnLayout,
+      twoColumnTextLayout,
+      threeColumnLayout,
+      fourColumnLayout,
+      sidebarLayout,
+      sectionHeaderLayout,
+      quoteLayout,
+      blankLayout,
+    ],
+  },
+  {
+    id: "image",
+    name: "Image Layouts",
+    layouts: [
+      imageAndTextLayout,
+      textAndImageLayout,
+      titleTextImageLayout,
+      twoImageColumnsLayout,
+      threeImageColumnsLayout,
+      fourImageColumnsLayout,
+      imageGalleryLayout,
+    ],
+  },
+];
+
+/**
+ * Array of all available slide layouts (flat list).
  * Use this to populate a layout picker or menu.
  */
-export const layouts: SlideLayout[] = [
-  titleLayout,
-  titleOnlyLayout,
-  contentLayout,
-  twoColumnLayout,
-  twoColumnTextLayout,
-  threeColumnLayout,
-  fourColumnLayout,
-  sidebarLayout,
-  sectionHeaderLayout,
-  quoteLayout,
-  blankLayout,
-];
+export const layouts: SlideLayout[] = layoutCategories.flatMap(
+  (category) => category.layouts,
+);
 
 /**
  * Get a layout by its ID
@@ -473,7 +683,15 @@ export {
   sectionHeaderLayout,
   quoteLayout,
   blankLayout,
+  // Image layouts
+  imageAndTextLayout,
+  textAndImageLayout,
+  titleTextImageLayout,
+  twoImageColumnsLayout,
+  threeImageColumnsLayout,
+  fourImageColumnsLayout,
+  imageGalleryLayout,
 };
 
 // Export helper functions for creating custom layouts
-export { text, heading, paragraph, emptyParagraph, column, row };
+export { text, heading, paragraph, emptyParagraph, column, row, image };
