@@ -52,6 +52,8 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
   };
 
   const initiateResize = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent text selection on mousedown
+
     const el = resizeRef.current;
     if (!el) return;
 
@@ -70,7 +72,12 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
 
     columnIndexRef.current = resolvedPos.index() - 1;
 
+    // Disable text selection during resize
+    document.body.style.userSelect = "none";
+
     const handleMouseUp = () => {
+      // Re-enable text selection
+      document.body.style.userSelect = "";
       window.removeEventListener("mousemove", resize);
       window.removeEventListener("mouseup", handleMouseUp);
     };
