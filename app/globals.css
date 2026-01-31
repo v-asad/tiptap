@@ -133,10 +133,6 @@
   }
 }
 
-.tiptap.ProseMirror {
-  @apply focus:outline-none;
-}
-
 /* Editor Theme Styles */
 .editor-themed {
   background-color: var(--editor-bg);

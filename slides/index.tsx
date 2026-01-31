@@ -24,7 +24,10 @@ export const SlideEditor = () => {
 
       <div className="editor-themed aspect-video w-full rounded-lg shadow-2xl">
         <DnDProvider>
-          <EditorContent editor={editor} className="h-full p-6" />
+          <EditorContent
+            editor={editor}
+            className="h-full *:focus:outline-none *:h-full *:grid *:place-content-center *:p-6"
+          />
         </DnDProvider>
       </div>
 
