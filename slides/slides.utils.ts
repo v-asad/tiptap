@@ -6,6 +6,7 @@ export enum NodeName {
   ROW = "row",
   PARAGRAPH = "paragraph",
   HEADING = "heading",
+  IMAGE = "image",
 }
 
 export const getNodeAttributes = <T>({

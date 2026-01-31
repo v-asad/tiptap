@@ -9,6 +9,7 @@ import { HeadingExt } from "../exts/heading";
 import { ColumnExt } from "../exts/column";
 import { RowExt } from "../exts/row";
 import { LinkExt } from "../exts/link";
+import { ImageExt } from "../exts/image";
 import { threeColumnLayout } from "../layouts";
 
 interface UseTiptapEditorOptions {
@@ -25,6 +26,7 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
       Focus,
       ParagraphExt,
       HeadingExt,
+      ImageExt,
       ColumnExt,
       RowExt,
       LinkExt,

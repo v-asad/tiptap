@@ -7,6 +7,7 @@ import {
   Calendar,
   FileText,
   Sparkles,
+  ImageIcon,
 } from "lucide-react";
 import type { SlashCommand } from "./types";
 
@@ -49,6 +50,16 @@ export const defaultCommands: SlashCommand[] = [
     keywords: ["text", "p", "normal"],
     action: (editor) => {
       editor.chain().focus().setParagraph().run();
+    },
+  },
+  {
+    id: "image",
+    title: "Image",
+    description: "Insert an image block",
+    icon: <ImageIcon className="h-4 w-4" />,
+    keywords: ["image", "img", "picture", "photo"],
+    action: (editor) => {
+      editor.chain().focus().insertContent({ type: "image" }).run();
     },
   },
   {

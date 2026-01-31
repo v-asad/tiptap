@@ -17,6 +17,7 @@ export const isLeafNode = (name: NodeName) => {
   switch (name) {
     case NodeName.HEADING:
     case NodeName.PARAGRAPH:
+    case NodeName.IMAGE:
       return true;
 
     default:

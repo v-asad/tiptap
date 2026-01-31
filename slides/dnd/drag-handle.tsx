@@ -10,6 +10,7 @@ const hoverClassMap: Record<NodeName, string> = {
   [NodeName.HEADING]: "group-hover/heading:flex",
   [NodeName.COLUMN]: "group-hover/column:flex",
   [NodeName.ROW]: "group-hover/row:flex",
+  [NodeName.IMAGE]: "group-hover/image:flex",
 
   // no drag handle for these nodes
   [NodeName.DOC]: "",
