@@ -9,6 +9,8 @@ import { ReactNodeViewProps } from "@tiptap/react";
 import { TextSelection } from "@tiptap/pm/state";
 import { FontSizeDropdown } from "./font-size";
 import { DeleteNode } from "./delete-node";
+import { ColumnWidthDropdown } from "./column-width-dropdown";
+import { NodeName } from "@/slides/slides.utils";
 
 type NodeActionsProps<T> = ReactNodeViewProps<T> & {
   dragHandleProps?: ComponentProps<typeof DragHandle>;
@@ -44,6 +46,13 @@ export function NodeActions<T>({
     selectAll();
   };
 
+  const isRowNode = () => {
+    const pos = getPos();
+    if (pos === null || pos === undefined) return false;
+    const node = editor.state.doc.nodeAt(pos);
+    return node?.type.name === NodeName.ROW;
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverAnchor>
@@ -63,6 +72,7 @@ export function NodeActions<T>({
       >
         <DeleteNode editor={editor} getPos={getPos} />
         <FontSizeDropdown editor={editor} />
+        {isRowNode() && <ColumnWidthDropdown editor={editor} getPos={getPos} />}
       </PopoverContent>
     </Popover>
   );

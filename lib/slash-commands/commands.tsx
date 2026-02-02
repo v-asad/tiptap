@@ -10,6 +10,9 @@ import {
   ImageIcon,
   List,
   ListOrdered,
+  Columns2,
+  Columns3,
+  Columns4,
 } from "lucide-react";
 import type { SlashCommand } from "./types";
 
@@ -161,6 +164,72 @@ export const defaultCommands: SlashCommand[] = [
         .chain()
         .focus()
         .insertContent("✨ Important note: Add your text here")
+        .run();
+    },
+  },
+  {
+    id: "two-columns",
+    title: "2 Columns",
+    description: "Insert a two-column layout",
+    icon: <Columns2 className="h-4 w-4" />,
+    keywords: ["columns", "layout", "split", "2", "two"],
+    action: (editor) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "row",
+          attrs: { columnWidths: [1, 1] },
+          content: [
+            { type: "column", content: [{ type: "paragraph" }] },
+            { type: "column", content: [{ type: "paragraph" }] },
+          ],
+        })
+        .run();
+    },
+  },
+  {
+    id: "three-columns",
+    title: "3 Columns",
+    description: "Insert a three-column layout",
+    icon: <Columns3 className="h-4 w-4" />,
+    keywords: ["columns", "layout", "split", "3", "three"],
+    action: (editor) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "row",
+          attrs: { columnWidths: [1, 1, 1] },
+          content: [
+            { type: "column", content: [{ type: "paragraph" }] },
+            { type: "column", content: [{ type: "paragraph" }] },
+            { type: "column", content: [{ type: "paragraph" }] },
+          ],
+        })
+        .run();
+    },
+  },
+  {
+    id: "four-columns",
+    title: "4 Columns",
+    description: "Insert a four-column layout",
+    icon: <Columns4 className="h-4 w-4" />,
+    keywords: ["columns", "layout", "split", "4", "four"],
+    action: (editor) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "row",
+          attrs: { columnWidths: [1, 1, 1, 1] },
+          content: [
+            { type: "column", content: [{ type: "paragraph" }] },
+            { type: "column", content: [{ type: "paragraph" }] },
+            { type: "column", content: [{ type: "paragraph" }] },
+            { type: "column", content: [{ type: "paragraph" }] },
+          ],
+        })
         .run();
     },
   },
