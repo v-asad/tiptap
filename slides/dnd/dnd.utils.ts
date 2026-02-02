@@ -91,6 +91,8 @@ export const findNearestEdge = (
   const horizontalThreshold =
     aspectRatio > 1 ? Math.min(50, rect.width * 0.1) : 0;
 
+  const MAX_OFFSET = 50;
+
   const top = Math.abs(y - rect.top);
   const right = Math.abs(x - rect.right) - horizontalThreshold;
   const bottom = Math.abs(y - rect.bottom);
@@ -98,10 +100,14 @@ export const findNearestEdge = (
 
   const edgeDistancesToCompute = [];
 
-  if (dropCursorPosAllowance.TOP) edgeDistancesToCompute.push(top);
-  if (dropCursorPosAllowance.RIGHT) edgeDistancesToCompute.push(right);
-  if (dropCursorPosAllowance.BOTTOM) edgeDistancesToCompute.push(bottom);
-  if (dropCursorPosAllowance.LEFT) edgeDistancesToCompute.push(left);
+  if (dropCursorPosAllowance.TOP && top < MAX_OFFSET)
+    edgeDistancesToCompute.push(top);
+  if (dropCursorPosAllowance.RIGHT && right < MAX_OFFSET)
+    edgeDistancesToCompute.push(right);
+  if (dropCursorPosAllowance.BOTTOM && bottom < MAX_OFFSET)
+    edgeDistancesToCompute.push(bottom);
+  if (dropCursorPosAllowance.LEFT && left < MAX_OFFSET)
+    edgeDistancesToCompute.push(left);
 
   const min = Math.min(...edgeDistancesToCompute);
 
