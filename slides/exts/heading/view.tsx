@@ -14,6 +14,8 @@ export const CustomHeading = (
 ) => {
   const level = props.node.attrs.level as HeadingLevel;
 
+  const { textAlign } = props.node.attrs;
+
   return (
     <DragDropNodeViewProvider
       className={cn("font-medium px-1 py-1", {
@@ -27,7 +29,15 @@ export const CustomHeading = (
       <DropCursor />
       <NodeActions {...props} />
 
-      <NodeViewContent contentEditable className="outline-none" />
+      <NodeViewContent
+        contentEditable
+        className={cn({
+          "text-left": textAlign === "left",
+          "text-right": textAlign === "right",
+          "text-center": textAlign === "center",
+          "text-justify": textAlign === "justify",
+        })}
+      />
 
       {props.node.textContent.trim() === "" && <NodePlaceholder />}
     </DragDropNodeViewProvider>

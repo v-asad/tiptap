@@ -2,6 +2,11 @@ import { Content, useEditor, type AnyExtension } from "@tiptap/react";
 
 import Text from "@tiptap/extension-text";
 import Focus from "@tiptap/extension-focus";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Strike from "@tiptap/extension-strike";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
 
 import { TextStyleKit } from "@tiptap/extension-text-style";
 
@@ -16,6 +21,7 @@ import { BulletListExt } from "../exts/bullet-list";
 import { OrderedListExt } from "../exts/ordered-list";
 import { ListItemExt } from "../exts/list-item";
 import { threeColumnLayout } from "../layouts";
+import { NodeName } from "../slides.utils";
 
 interface UseTiptapEditorOptions {
   additionalExtensions?: AnyExtension[];
@@ -30,6 +36,14 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
       DocumentExt,
       Text,
       Focus,
+      Bold,
+      Italic,
+      Strike,
+      Underline,
+      TextAlign.configure({
+        types: [NodeName.HEADING, NodeName.PARAGRAPH],
+        defaultAlignment: "left",
+      }),
       ParagraphExt,
       HeadingExt,
       ImageExt,

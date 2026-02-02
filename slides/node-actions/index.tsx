@@ -10,6 +10,8 @@ import { TextSelection } from "@tiptap/pm/state";
 import { FontSizeDropdown } from "./font-size";
 import { DeleteNode } from "./delete-node";
 import { ColumnWidthDropdown } from "./column-width-dropdown";
+import { TextFormatButtons } from "./text-format-buttons";
+import { TextAlignDropdown } from "./text-align-dropdown";
 import { NodeName } from "@/slides/slides.utils";
 
 type NodeActionsProps<T> = ReactNodeViewProps<T> & {
@@ -68,11 +70,23 @@ export function NodeActions<T>({
         contentEditable={false}
         align="start"
         side="top"
-        className="p-2 flex gap-2 items-center"
+        className="p-2 flex gap-2 items-center w-fit"
       >
-        <DeleteNode editor={editor} getPos={getPos} />
         <FontSizeDropdown editor={editor} />
-        {isRowNode() && <ColumnWidthDropdown editor={editor} getPos={getPos} />}
+        <div className="w-px h-6 bg-border" />
+        <TextFormatButtons editor={editor} />
+        <div className="w-px h-6 bg-border" />
+        <TextAlignDropdown editor={editor} />
+
+        {isRowNode() && (
+          <>
+            <div className="w-px h-6 bg-border" />
+            <ColumnWidthDropdown editor={editor} getPos={getPos} />
+          </>
+        )}
+
+        <div className="w-px h-6 bg-border" />
+        <DeleteNode editor={editor} getPos={getPos} />
       </PopoverContent>
     </Popover>
   );
