@@ -61,7 +61,7 @@ export const SlidePreview: React.FC<SlidePreviewProps> = ({ contentJSON }) => {
   }, [editor, contentJSON]);
 
   return (
-    <div className="relative size-full bg-yellow-200">
+    <div className="relative size-full bg-yellow-200 pointer-events-none">
       <div
         className="scale-[0.162] origin-top-left"
         style={{ height: `${SLIDE_HEIGHT}px`, width: `${SLIDE_WIDTH}px` }}

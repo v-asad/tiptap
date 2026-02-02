@@ -81,6 +81,12 @@ export const useDroppableNode = ({
     const sourceNode = editor.state.doc.nodeAt(activeNode.pos);
     if (!sourceNode) return;
 
+    // Use the actual node size from the current document state
+    const sourceNodeSize = sourceNode.nodeSize;
+
+    // Don't do anything if dragging to the same position
+    if (activeNode.pos === targetPos) return;
+
     const tr = editor.state.tr;
 
     let insertionOffset = 0;
@@ -106,7 +112,7 @@ export const useDroppableNode = ({
       },
     );
 
-    tr.delete(activeNode.pos, activeNode.pos + activeNode.size);
+    tr.delete(activeNode.pos, activeNode.pos + sourceNodeSize);
 
     const targetPosWithOffset = tr.mapping.map(targetPos + insertionOffset);
 

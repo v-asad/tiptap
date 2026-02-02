@@ -84,9 +84,7 @@ export function SlashCommandEditor({
 }
 
 // Hook to create editor extension with callbacks
-export function useSlashCommandExtension(
-  _commands: SlashCommand[] = defaultCommands,
-) {
+export function useSlashCommandExtension() {
   const [slashState, setSlashState] = useState<{
     isOpen: boolean;
     query: string;

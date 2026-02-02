@@ -8,6 +8,26 @@ export interface EditorTheme {
   bodyFont: string;
 }
 
+export interface CustomEditorTheme extends EditorTheme {
+  id: string;
+  isCustom: true;
+}
+
+export const AVAILABLE_FONTS = [
+  { name: "Inter", value: "'Inter', sans-serif" },
+  { name: "DM Sans", value: "'DM Sans', sans-serif" },
+  { name: "Poppins", value: "'Poppins', sans-serif" },
+  { name: "Space Grotesk", value: "'Space Grotesk', sans-serif" },
+  { name: "Sora", value: "'Sora', sans-serif" },
+  { name: "Nunito", value: "'Nunito', sans-serif" },
+  { name: "Playfair Display", value: "'Playfair Display', serif" },
+  { name: "Source Sans Pro", value: "'Source Sans Pro', sans-serif" },
+  { name: "IBM Plex Sans", value: "'IBM Plex Sans', sans-serif" },
+  { name: "Georgia", value: "'Georgia', serif" },
+  { name: "Verdana", value: "'Verdana', sans-serif" },
+  { name: "Trebuchet MS", value: "'Trebuchet MS', sans-serif" },
+];
+
 export const themes: EditorTheme[] = [
   {
     name: "Default",
