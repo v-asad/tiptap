@@ -26,6 +26,18 @@ export const RowExt = Node.create({
     return {
       columnWidths: {
         default: [],
+        parseHTML: (element) => {
+          const attr = element.getAttribute("columnwidths");
+          if (!attr) return [];
+          return attr.split(",").map((s) => parseFloat(s));
+        },
+        renderHTML: (attributes) => {
+          if (!attributes.columnWidths || !attributes.columnWidths.length)
+            return {};
+          return {
+            columnwidths: attributes.columnWidths.join(","),
+          };
+        },
       },
     };
   },
@@ -43,7 +55,7 @@ export const RowExt = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["row", mergeAttributes(HTMLAttributes)];
+    return ["row", mergeAttributes(HTMLAttributes), 0];
   },
 
   addNodeView() {

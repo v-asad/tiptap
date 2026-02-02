@@ -30,7 +30,7 @@ export const ColumnExt = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["column", mergeAttributes(HTMLAttributes)];
+    return ["column", mergeAttributes(HTMLAttributes), 0];
   },
 
   addNodeView() {

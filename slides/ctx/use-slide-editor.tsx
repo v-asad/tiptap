@@ -82,8 +82,8 @@ export const SlideEditorProvider = (props: PropsWithChildren) => {
     if (!editor) return;
 
     const updateHandler = () => {
-      const json = editor.getJSON();
-      updateSlide(json);
+      const html = editor.getHTML();
+      updateSlide(html);
     };
 
     editor.on("update", updateHandler);

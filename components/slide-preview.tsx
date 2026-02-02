@@ -2,24 +2,12 @@
 
 import React, { useEffect } from "react";
 import { useEditor, EditorContent, Content, Editor } from "@tiptap/react";
-import Text from "@tiptap/extension-text";
-import Focus from "@tiptap/extension-focus";
 
-import { DocumentExt } from "@/slides/exts/document";
-import { ParagraphExt } from "@/slides/exts/paragraph";
-import { HeadingExt } from "@/slides/exts/heading";
-import { ColumnExt } from "@/slides/exts/column";
-import { RowExt } from "@/slides/exts/row";
-import { LinkExt } from "@/slides/exts/link";
-import { ImageExt } from "@/slides/exts/image";
-import { BulletListExt } from "@/slides/exts/bullet-list";
-import { OrderedListExt } from "@/slides/exts/ordered-list";
-import { ListItemExt } from "@/slides/exts/list-item";
 import { SLIDE_HEIGHT, SLIDE_WIDTH } from "@/slides/slides.utils";
 import { cn } from "@/lib/utils";
 
 import { debounce } from "lodash";
-import { TextStyleKit } from "@tiptap/extension-text-style";
+import { availableExtensions } from "@/slides/exts";
 
 interface SlidePreviewProps {
   contentJSON: Content;
@@ -32,21 +20,7 @@ interface SlidePreviewProps {
  */
 export const SlidePreview: React.FC<SlidePreviewProps> = ({ contentJSON }) => {
   const editor = useEditor({
-    extensions: [
-      DocumentExt,
-      Text,
-      Focus,
-      ParagraphExt,
-      HeadingExt,
-      ImageExt,
-      ColumnExt,
-      RowExt,
-      LinkExt,
-      BulletListExt,
-      OrderedListExt,
-      ListItemExt,
-      TextStyleKit,
-    ],
+    extensions: availableExtensions,
     content: contentJSON as Content,
     editable: false,
     immediatelyRender: false,
