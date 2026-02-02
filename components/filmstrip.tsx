@@ -36,7 +36,7 @@ export const Filmstrip: React.FC = () => {
     if (!existingSlide) return;
 
     flushSync(() => setActiveSlide(id));
-    editor?.commands.setContent(existingSlide.contentJSON);
+    editor?.commands.setContent(existingSlide.content);
   };
 
   return (
@@ -78,7 +78,7 @@ export const Filmstrip: React.FC = () => {
                   onClick={() => changeSlide(slidePreview.id)}
                 >
                   <div className="h-full overflow-hidden">
-                    <SlidePreview contentJSON={slidePreview.contentJSON} />
+                    <SlidePreview content={slidePreview.content} />
                   </div>
 
                   {isActive && (

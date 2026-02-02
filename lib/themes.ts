@@ -130,4 +130,4 @@ export const themes: EditorTheme[] = [
   },
 ];
 
-export const DEFAULT_THEME = themes[4];
+export const DEFAULT_THEME = themes[2];

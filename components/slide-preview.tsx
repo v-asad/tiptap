@@ -10,7 +10,7 @@ import { debounce } from "lodash";
 import { availableExtensions } from "@/slides/exts";
 
 interface SlidePreviewProps {
-  contentJSON: Content;
+  content: Content;
   className?: string;
 }
 
@@ -18,21 +18,21 @@ interface SlidePreviewProps {
  * Read-only Tiptap editor for previewing slide content.
  * Uses the same extensions as the main editor for consistent rendering.
  */
-export const SlidePreview: React.FC<SlidePreviewProps> = ({ contentJSON }) => {
+export const SlidePreview: React.FC<SlidePreviewProps> = ({ content }) => {
   const editor = useEditor({
     extensions: availableExtensions,
-    content: contentJSON as Content,
+    content: content as Content,
     editable: false,
     immediatelyRender: false,
   });
 
   useEffect(() => {
-    const updateContent = debounce((editor: Editor, contentJSON: Content) => {
-      editor.commands.setContent(contentJSON);
+    const updateContent = debounce((editor: Editor, content: Content) => {
+      editor.commands.setContent(content);
     }, 1000);
 
-    if (editor && contentJSON) updateContent(editor, contentJSON);
-  }, [editor, contentJSON]);
+    if (editor && content) updateContent(editor, content);
+  }, [editor, content]);
 
   return (
     <div className="relative size-full bg-yellow-200 pointer-events-none">
@@ -44,7 +44,7 @@ export const SlidePreview: React.FC<SlidePreviewProps> = ({ contentJSON }) => {
           editor={editor}
           className={cn(
             "editor-themed size-full",
-            "*:flex *:flex-col *:justify-center *:focus:outline-none *:h-full *:p-6",
+            "*:flex *:flex-col *:justify-center *:focus:outline-none *:h-full *:p-10",
           )}
         />
       </div>

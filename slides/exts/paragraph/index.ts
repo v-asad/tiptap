@@ -20,6 +20,18 @@ export const ParagraphExt = Paragraph.extend({
 
   defining: true,
 
+  addAttributes() {
+    return {
+      textAlign: {
+        default: "left",
+        parseHTML: (element) => {
+          const attr = element.getAttribute("textAlign");
+          return attr ?? "left";
+        },
+      },
+    };
+  },
+
   addNodeView() {
     return ReactNodeViewRenderer(CustomParagraph);
   },

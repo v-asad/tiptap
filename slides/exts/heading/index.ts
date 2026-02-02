@@ -20,6 +20,28 @@ export const HeadingExt = Heading.extend({
 
   defining: true,
 
+  addAttributes() {
+    return {
+      level: {
+        default: 1,
+        parseHTML: (element) => {
+          const level = element.tagName.replace("H", "");
+          return Number(level) || 1;
+        },
+        renderHTML: (attrs) => ({
+          level: attrs.level,
+        }),
+      },
+      textAlign: {
+        default: "left",
+        parseHTML: (element) => {
+          const attr = element.getAttribute("textAlign");
+          return attr ?? "left";
+        },
+      },
+    };
+  },
+
   addNodeView() {
     return ReactNodeViewRenderer(CustomHeading);
   },

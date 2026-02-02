@@ -15,13 +15,13 @@ export const ImportTemplate = () => {
   const { editor } = useSlideEditorContext();
 
   const handleImport = (template: SlidesTemplate) => {
-    const { id, contentJSON } = template.slides[0];
+    const { id, content } = template.slides[0];
 
     setTheme(template.theme);
     setSlidePreviews(template.slides);
     setActiveSlide(id);
 
-    editor?.commands.setContent(contentJSON);
+    editor?.commands.setContent(content);
   };
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {

@@ -10,19 +10,19 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { fourColumnLayout } from "../layouts";
+import { CatsTemplate } from "../templates";
 
 export interface SlidePreview {
   id: string;
-  contentJSON: Content;
+  content: Content;
 }
 
 type SlidesContextType = {
   slidePreviews: SlidePreview[];
   activeSlideId: string | null;
   setSlidePreviews: Dispatch<SetStateAction<SlidePreview[]>>;
-  addSlide: (contentJSON: Content) => void;
-  updateSlide: (contentJSON: Content) => void;
+  addSlide: (content: Content) => void;
+  updateSlide: (content: Content) => void;
   setActiveSlide: (id: string) => void;
   getActiveSlideContent: () => Content;
   deleteSlide: (id: string) => void;
@@ -31,34 +31,28 @@ type SlidesContextType = {
 const slidesContext = createContext<SlidesContextType | undefined>(undefined);
 
 export const SlidePreviewsProvider = (props: PropsWithChildren) => {
-  const [slidePreviews, setSlidePreviews] = useState<SlidePreview[]>([
-    {
-      id: crypto.randomUUID(),
-      contentJSON: {
-        type: "doc",
-        content: fourColumnLayout.content,
-      },
-    },
-  ]);
+  const [slidePreviews, setSlidePreviews] = useState<SlidePreview[]>(
+    CatsTemplate.slides,
+  );
 
   const [activeSlideId, setActiveSlideId] = useState<string | null>(
     slidePreviews[0].id,
   );
 
-  const addSlide = useCallback((contentJSON: Content) => {
+  const addSlide = useCallback((content: Content) => {
     const newSlidePreview: SlidePreview = {
       id: crypto.randomUUID(),
-      contentJSON,
+      content,
     };
     setSlidePreviews((prev) => [...prev, newSlidePreview]);
     setActiveSlideId(newSlidePreview.id);
   }, []);
 
   const updateSlide = useCallback(
-    (contentJSON: Content) => {
+    (content: Content) => {
       setSlidePreviews((prev) =>
         prev.map((slide) =>
-          slide.id === activeSlideId ? { ...slide, contentJSON } : slide,
+          slide.id === activeSlideId ? { ...slide, content } : slide,
         ),
       );
     },
@@ -71,8 +65,7 @@ export const SlidePreviewsProvider = (props: PropsWithChildren) => {
 
   const getActiveSlideContent = useCallback(() => {
     return (
-      slidePreviews.find((slide) => slide.id === activeSlideId)?.contentJSON ||
-      null
+      slidePreviews.find((slide) => slide.id === activeSlideId)?.content || null
     );
   }, [slidePreviews, activeSlideId]);
 
