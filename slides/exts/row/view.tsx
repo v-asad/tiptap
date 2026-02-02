@@ -82,7 +82,6 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
         )}
         // Pass grid-template-columns via CSS variable to child
         style={{ "--grid-cols": gridTemplateColumns } as React.CSSProperties}
-        contentEditable={false}
       />
 
       {shouldShowAddColButton && (

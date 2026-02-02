@@ -17,6 +17,8 @@ export const ColumnExt = Node.create({
 
   selectable: false,
 
+  isolating: true,
+
   defining: false,
 
   parseHTML() {

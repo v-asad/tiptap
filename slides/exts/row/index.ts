@@ -20,6 +20,8 @@ export const RowExt = Node.create({
 
   defining: false,
 
+  isolating: true,
+
   addAttributes() {
     return {
       columnWidths: {

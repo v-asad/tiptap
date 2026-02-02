@@ -97,7 +97,7 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
       <DropCursor />
       <NodeActions dragHandleProps={{ pos: "top" }} {...props} />
 
-      <NodeViewContent className="outline-none" contentEditable={false} />
+      <NodeViewContent className="outline-none" />
 
       <div
         contentEditable={false}
