@@ -1,0 +1,95 @@
+{
+  "paragraph": {
+    "content": "inline*",
+    "group": "block",
+    "inline": false,
+    "attrs": {
+      "textAlign": {
+        "default": null,
+        "allowedValues": ["left", "center", "right", "justify"]
+      }
+    },
+    "htmlTag": "p"
+  },
+  "doc": {
+    "content": "(row | paragraph | heading | image | bulletList | orderedList)+",
+    "group": null,
+    "inline": false,
+    "attrs": {}
+  },
+  "heading": {
+    "content": "inline*",
+    "group": "block",
+    "inline": false,
+    "attrs": {
+      "textAlign": {
+        "default": null,
+        "allowedValues": ["left", "center", "right", "justify"]
+      },
+      "level": {
+        "default": 1,
+        "allowedValues": [1, 2, 3, 4, 5, 6]
+      }
+    },
+    "htmlTag": "h"
+  },
+  "image": {
+    "group": "block",
+    "attrs": {
+      "src": {
+        "default": null
+      },
+      "alt": {
+        "default": null
+      },
+      "layout": {
+        "default": "default",
+        "allowedValues": [
+          "default",
+          "full-top",
+          "full-bottom",
+          "full-left",
+          "full-right"
+        ]
+      },
+      "size": {
+        "default": null,
+        "description": "When the layout value is not default, size attribute defines the width or height of image"
+      }
+    },
+    "htmlTag": "img"
+  },
+  "column": {
+    "content": "block+",
+    "group": "block",
+    "attrs": {},
+    "htmlTag": "column"
+  },
+  "row": {
+    "content": "column+",
+    "group": "block",
+    "attrs": {
+      "columnWidths": {
+        "default": [],
+        "description": "defines fractional width of columns for grid layout. default width for each column is 1. accumulative widths of all columns should be the same as number of columns."
+      }
+    },
+    "htmlTag": "row"
+  },
+  "bulletList": {
+    "content": "listItem+",
+    "group": "block list",
+    "attrs": {},
+    "html": "ul"
+  },
+  "orderedList": {
+    "content": "listItem+",
+    "group": "block list",
+    "html": "ol"
+  },
+  "listItem": {
+    "content": "paragraph block*",
+    "attrs": {},
+    "html": "li"
+  }
+}
