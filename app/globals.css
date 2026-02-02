@@ -205,17 +205,17 @@
 
 /* Full-bleed image layout spacing */
 .editor-themed .ProseMirror:has([data-image-layout="full-left"]) {
-  padding-left: calc(50% + 1.5rem);
+  padding-left: calc(var(--image-left-size, 50%) + 1.5rem);
 }
 
 .editor-themed .ProseMirror:has([data-image-layout="full-right"]) {
-  padding-right: calc(50% + 1.5rem);
+  padding-right: calc(var(--image-right-size, 50%) + 1.5rem);
 }
 
 .editor-themed .ProseMirror:has([data-image-layout="full-top"]) {
-  padding-top: calc(12rem + 1.5rem);
+  padding-top: calc(var(--image-top-size, 12rem) + 1.5rem);
 }
 
 .editor-themed .ProseMirror:has([data-image-layout="full-bottom"]) {
-  padding-bottom: calc(12rem + 1.5rem);
+  padding-bottom: calc(var(--image-bottom-size, 12rem) + 1.5rem);
 }

@@ -30,6 +30,12 @@ export const ImageExt = Image.extend({
       layout: {
         default: "default",
       },
+      // Size in pixels for full-layout images
+      // For full-top/full-bottom: this is the height
+      // For full-left/full-right: this is the width percentage (0-100)
+      size: {
+        default: null,
+      },
     };
   },
 

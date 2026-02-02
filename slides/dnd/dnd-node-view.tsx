@@ -39,9 +39,10 @@ type DragDropNodeViewProviderProps<T = HTMLElement> = Omit<
   ReactNodeViewProps<T>,
   "ref"
 > &
-  Pick<ComponentProps<"div">, "className" | "children"> & {
+  Pick<ComponentProps<"div">, "className" | "children" | "style"> & {
     collisionPriority?: CollisionPriority;
     "data-image-layout"?: string;
+    "data-image-size"?: number;
     as?: ElementType;
   };
 
@@ -50,9 +51,11 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
   node,
   children,
   className,
+  style,
   editor,
   collisionPriority,
   "data-image-layout": dataImageLayout,
+  "data-image-size": dataImageSize,
   as,
 }: DragDropNodeViewProviderProps<T>) {
   const type = node.type.name as NodeName;
@@ -131,8 +134,10 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
           },
           className,
         )}
+        style={style}
         ref={setRefs}
         data-image-layout={dataImageLayout}
+        data-image-size={dataImageSize}
       >
         {children}
       </NodeViewWrapper>
