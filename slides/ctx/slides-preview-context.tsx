@@ -7,6 +7,8 @@ import {
   useContext,
   useState,
   useCallback,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { fourColumnLayout } from "../layouts";
 
@@ -18,6 +20,7 @@ export interface SlidePreview {
 type SlidesContextType = {
   slidePreviews: SlidePreview[];
   activeSlideId: string | null;
+  setSlidePreviews: Dispatch<SetStateAction<SlidePreview[]>>;
   addSlide: (contentJSON: Content) => void;
   updateSlide: (contentJSON: Content) => void;
   setActiveSlide: (id: string) => void;
@@ -91,6 +94,7 @@ export const SlidePreviewsProvider = (props: PropsWithChildren) => {
       value={{
         slidePreviews,
         activeSlideId,
+        setSlidePreviews,
         addSlide,
         updateSlide,
         setActiveSlide,

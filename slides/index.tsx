@@ -8,6 +8,8 @@ import { LayoutDropdown } from "@/components/layout-dropdown";
 import { SlashCommandDropdown } from "@/lib/slash-commands";
 import { Filmstrip } from "@/components/filmstrip";
 import { SLIDE_HEIGHT, SLIDE_WIDTH } from "./slides.utils";
+import { ExportTemplate } from "./template-actions/export-template";
+import { ImportTemplate } from "./template-actions/import-template";
 
 export const SlideEditor = () => {
   const {
@@ -24,9 +26,16 @@ export const SlideEditor = () => {
       <Filmstrip />
 
       <div className="flex-1 flex flex-col gap-4 p-4">
-        <div className="flex items-center justify-end gap-2">
-          <LayoutDropdown />
-          <ThemeDropdown />
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <ThemeDropdown />
+            <LayoutDropdown />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <ExportTemplate />
+            <ImportTemplate />
+          </div>
         </div>
 
         <div
