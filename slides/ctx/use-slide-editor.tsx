@@ -12,10 +12,8 @@ import {
 
 import { Editor as TiptapEditor } from "@tiptap/react";
 import { useTiptapEditor } from "./use-tiptap-editor";
-import {
-  useSlashCommandEditor,
-  type SlashCommand,
-} from "@/lib/slash-commands";
+import { useSlashCommandEditor, type SlashCommand } from "@/lib/slash-commands";
+import { useSlidePreviews } from "./slides-preview-context";
 
 type ActiveNode = {
   pos: number;
@@ -57,7 +55,8 @@ export const SlideEditorProvider = (props: PropsWithChildren) => {
   const [activeNode, setActiveNode] =
     useState<SlideEditorContext["activeNode"]>();
 
-  // Initialize slash command system
+  const { getActiveSlideContent, updateSlide } = useSlidePreviews();
+
   const {
     slashCommandExtension,
     setEditor,
@@ -70,12 +69,28 @@ export const SlideEditorProvider = (props: PropsWithChildren) => {
 
   const { editor } = useTiptapEditor({
     additionalExtensions: [slashCommandExtension],
+    initialContent: getActiveSlideContent(),
   });
 
   // Set the editor reference for slash commands
   useEffect(() => {
     setEditor(editor);
   }, [editor, setEditor]);
+
+  // Save editor content to current slide on change
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateHandler = () => {
+      const json = editor.getJSON();
+      updateSlide(json);
+    };
+
+    editor.on("update", updateHandler);
+    return () => {
+      editor.off("update", updateHandler);
+    };
+  }, [editor, updateSlide]);
 
   return (
     <slideEditorContext.Provider

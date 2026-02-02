@@ -1,4 +1,4 @@
-import { useEditor, type AnyExtension } from "@tiptap/react";
+import { Content, useEditor, type AnyExtension } from "@tiptap/react";
 
 import Text from "@tiptap/extension-text";
 import Focus from "@tiptap/extension-focus";
@@ -17,10 +17,11 @@ import { threeColumnLayout } from "../layouts";
 
 interface UseTiptapEditorOptions {
   additionalExtensions?: AnyExtension[];
+  initialContent?: Content;
 }
 
 export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
-  const { additionalExtensions = [] } = options;
+  const { additionalExtensions = [], initialContent } = options;
 
   const editor = useEditor({
     extensions: [
@@ -38,7 +39,7 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
       ListItemExt,
       ...additionalExtensions,
     ],
-    content: {
+    content: initialContent || {
       type: "doc",
       content: threeColumnLayout.content,
     },

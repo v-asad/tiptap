@@ -12,6 +12,9 @@ export enum NodeName {
   LIST_ITEM = "listItem",
 }
 
+export const SLIDE_HEIGHT = 720;
+export const SLIDE_WIDTH = 1280;
+
 export const getNodeAttributes = <T>({
   getPos,
   editor,
