@@ -7,8 +7,8 @@ import { ComponentProps, useState } from "react";
 import { DragHandle } from "../dnd/drag-handle";
 import { ReactNodeViewProps } from "@tiptap/react";
 import { TextSelection } from "@tiptap/pm/state";
-import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
+import { FontSizeDropdown } from "./font-size";
+import { DeleteNode } from "./delete-node";
 
 type NodeActionsProps<T> = ReactNodeViewProps<T> & {
   dragHandleProps?: ComponentProps<typeof DragHandle>;
@@ -39,19 +39,6 @@ export function NodeActions<T>({
     editor.view.focus();
   };
 
-  const deleteNode = () => {
-    const pos = getPos();
-    if (pos === null || pos === undefined) return;
-
-    const node = editor.view.state.doc.nodeAt(pos);
-    if (!node) return;
-
-    const tr = editor.state.tr.delete(pos, pos + node.nodeSize);
-
-    editor.view.dispatch(tr);
-    editor.view.focus();
-  };
-
   const handleClick = () => {
     setOpen((p) => !p);
     selectAll();
@@ -72,16 +59,10 @@ export function NodeActions<T>({
         contentEditable={false}
         align="start"
         side="top"
-        className="p-2"
+        className="p-2 flex gap-2 items-center"
       >
-        <Button
-          size="icon-sm"
-          variant="ghost"
-          className="text-destructive hover:text-destructive"
-          onClick={() => deleteNode()}
-        >
-          <Trash2Icon />
-        </Button>
+        <DeleteNode editor={editor} getPos={getPos} />
+        <FontSizeDropdown editor={editor} />
       </PopoverContent>
     </Popover>
   );

@@ -19,6 +19,7 @@ import { SLIDE_HEIGHT, SLIDE_WIDTH } from "@/slides/slides.utils";
 import { cn } from "@/lib/utils";
 
 import { debounce } from "lodash";
+import { TextStyleKit } from "@tiptap/extension-text-style";
 
 interface SlidePreviewProps {
   contentJSON: Content;
@@ -44,6 +45,7 @@ export const SlidePreview: React.FC<SlidePreviewProps> = ({ contentJSON }) => {
       BulletListExt,
       OrderedListExt,
       ListItemExt,
+      TextStyleKit,
     ],
     content: contentJSON as Content,
     editable: false,

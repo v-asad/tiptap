@@ -3,6 +3,8 @@ import { Content, useEditor, type AnyExtension } from "@tiptap/react";
 import Text from "@tiptap/extension-text";
 import Focus from "@tiptap/extension-focus";
 
+import { TextStyleKit } from "@tiptap/extension-text-style";
+
 import { DocumentExt } from "../exts/document";
 import { ParagraphExt } from "../exts/paragraph";
 import { HeadingExt } from "../exts/heading";
@@ -37,6 +39,7 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
       BulletListExt,
       OrderedListExt,
       ListItemExt,
+      TextStyleKit,
       ...additionalExtensions,
     ],
     content: initialContent || {
