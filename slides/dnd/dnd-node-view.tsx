@@ -3,6 +3,7 @@ import {
   ComponentProps,
   createContext,
   Dispatch,
+  ElementType,
   SetStateAction,
   useContext,
   useMemo,
@@ -41,6 +42,7 @@ type DragDropNodeViewProviderProps<T = HTMLElement> = Omit<
   Pick<ComponentProps<"div">, "className" | "children"> & {
     collisionPriority?: CollisionPriority;
     "data-image-layout"?: string;
+    as?: ElementType;
   };
 
 export function DragDropNodeViewProvider<T = HTMLElement>({
@@ -51,6 +53,7 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
   editor,
   collisionPriority,
   "data-image-layout": dataImageLayout,
+  as,
 }: DragDropNodeViewProviderProps<T>) {
   const type = node.type.name as NodeName;
 
@@ -117,6 +120,7 @@ export function DragDropNodeViewProvider<T = HTMLElement>({
       }}
     >
       <NodeViewWrapper
+        as={as}
         className={cn(
           "relative h-full my-1",
           {

@@ -8,6 +8,8 @@ import {
   FileText,
   Sparkles,
   ImageIcon,
+  List,
+  ListOrdered,
 } from "lucide-react";
 import type { SlashCommand } from "./types";
 
@@ -60,6 +62,42 @@ export const defaultCommands: SlashCommand[] = [
     keywords: ["image", "img", "picture", "photo"],
     action: (editor) => {
       editor.chain().focus().insertContent({ type: "image" }).run();
+    },
+  },
+  {
+    id: "bulletList",
+    title: "Bullet List",
+    description: "Create a bulleted list",
+    icon: <List className="h-4 w-4" />,
+    keywords: ["list", "bullet", "ul", "unordered"],
+    action: (editor) => {
+      editor.chain().focus().insertContent({
+        type: "bulletList",
+        content: [
+          {
+            type: "listItem",
+            content: [{ type: "paragraph" }],
+          },
+        ],
+      }).run();
+    },
+  },
+  {
+    id: "orderedList",
+    title: "Numbered List",
+    description: "Create a numbered list",
+    icon: <ListOrdered className="h-4 w-4" />,
+    keywords: ["list", "numbered", "ol", "ordered"],
+    action: (editor) => {
+      editor.chain().focus().insertContent({
+        type: "orderedList",
+        content: [
+          {
+            type: "listItem",
+            content: [{ type: "paragraph" }],
+          },
+        ],
+      }).run();
     },
   },
   {

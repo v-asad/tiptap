@@ -9,6 +9,11 @@ type UseAcceptedNodesParams<T> = Pick<
 
 const LEAF_NODES = [NodeName.HEADING, NodeName.PARAGRAPH, NodeName.IMAGE];
 const BRANCH_NODES = [NodeName.COLUMN, NodeName.ROW];
+const LIST_NODES = [
+  NodeName.BULLET_LIST,
+  NodeName.ORDERED_LIST,
+  NodeName.LIST_ITEM,
+];
 
 export const useAcceptedNodes = <T>({
   editor,
@@ -30,14 +35,18 @@ export const useAcceptedNodes = <T>({
       case NodeName.PARAGRAPH:
       case NodeName.IMAGE:
         if (parentName === NodeName.DOC)
-          return [...LEAF_NODES, ...BRANCH_NODES];
+          return [...LEAF_NODES, ...BRANCH_NODES, ...LIST_NODES];
         return LEAF_NODES;
 
+      case NodeName.ORDERED_LIST:
+      case NodeName.BULLET_LIST:
+        return [...LEAF_NODES, ...LIST_NODES, ...BRANCH_NODES];
+
       case NodeName.COLUMN:
-        return [...LEAF_NODES, NodeName.COLUMN];
+        return [...LEAF_NODES, ...LIST_NODES, NodeName.COLUMN];
 
       case NodeName.ROW:
-        return [...LEAF_NODES, NodeName.ROW];
+        return [...LEAF_NODES, ...LIST_NODES, NodeName.ROW];
     }
   }, [nodeName, parentName]);
 

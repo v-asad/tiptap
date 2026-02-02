@@ -111,6 +111,35 @@ const row = (...columns: JSONContent[]): JSONContent => ({
   content: columns,
 });
 
+/**
+ * Creates a list item node with optional text content
+ * @param content - Text content for the list item (creates a paragraph inside)
+ */
+const listItem = (content: string): JSONContent => ({
+  type: "listItem",
+  content: [paragraph(content)],
+});
+
+/**
+ * Creates a bullet list node with the specified items
+ * @param items - Array of strings for each list item
+ */
+const bulletList = (...items: string[]): JSONContent => ({
+  type: "bulletList",
+  content: items.map((item) => listItem(item)),
+});
+
+/**
+ * Creates an ordered list node with the specified items
+ * @param items - Array of strings for each list item
+ * @param start - Starting number for the list (default: 1)
+ */
+const orderedList = (items: string[], start: number = 1): JSONContent => ({
+  type: "orderedList",
+  attrs: { start },
+  content: items.map((item) => listItem(item)),
+});
+
 // ============================================================================
 // Predefined Layouts
 // ============================================================================
@@ -679,6 +708,163 @@ const quoteLayout: SlideLayout = {
   ],
 };
 
+// ============================================================================
+// List Layouts
+// ============================================================================
+
+/**
+ * Bullet List Layout
+ *
+ * A simple layout with a title and bullet points.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Bullet list with items
+ */
+const bulletListLayout: SlideLayout = {
+  id: "bullet-list",
+  name: "Bullet List",
+  description: "A title with bullet points",
+  content: [
+    heading(1, "Key Points"),
+    bulletList(
+      "First important point",
+      "Second important point",
+      "Third important point",
+    ),
+  ],
+};
+
+/**
+ * Numbered List Layout
+ *
+ * A simple layout with a title and numbered steps.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Ordered list with items
+ */
+const numberedListLayout: SlideLayout = {
+  id: "numbered-list",
+  name: "Numbered List",
+  description: "A title with numbered steps",
+  content: [
+    heading(1, "Steps to Follow"),
+    orderedList([
+      "First step in the process",
+      "Second step in the process",
+      "Third step in the process",
+    ]),
+  ],
+};
+
+/**
+ * Two Column List Layout
+ *
+ * A layout with two columns, each containing a list.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Row:
+ *   - Column 1: Heading + bullet list
+ *   - Column 2: Heading + bullet list
+ */
+const twoColumnListLayout: SlideLayout = {
+  id: "two-column-list",
+  name: "Two Column List",
+  description: "Two columns with bullet lists",
+  content: [
+    heading(1, "Comparison"),
+    row(
+      column(
+        heading(2, "Pros"),
+        bulletList("Advantage one", "Advantage two", "Advantage three"),
+      ),
+      column(
+        heading(2, "Cons"),
+        bulletList("Disadvantage one", "Disadvantage two", "Disadvantage three"),
+      ),
+    ),
+  ],
+};
+
+/**
+ * Content with List Layout
+ *
+ * A layout with text and a supporting bullet list.
+ *
+ * Structure:
+ * - Heading (level 1): Title
+ * - Paragraph: Introduction
+ * - Bullet list: Key points
+ */
+const contentWithListLayout: SlideLayout = {
+  id: "content-with-list",
+  name: "Content with List",
+  description: "Paragraph text followed by bullet points",
+  content: [
+    heading(1, "Overview"),
+    paragraph(
+      "Here is an introduction to the topic. This paragraph provides context for the points below.",
+    ),
+    bulletList(
+      "Supporting point one",
+      "Supporting point two",
+      "Supporting point three",
+    ),
+  ],
+};
+
+/**
+ * Image and List Layout
+ *
+ * A layout with an image on one side and a list on the other.
+ *
+ * Structure:
+ * - Row:
+ *   - Column 1: Image
+ *   - Column 2: Heading + bullet list
+ */
+const imageAndListLayout: SlideLayout = {
+  id: "image-and-list",
+  name: "Image and List",
+  description: "Image on left, bullet list on right",
+  content: [
+    row(
+      column(image()),
+      column(
+        heading(2, "Key Features"),
+        bulletList("Feature one", "Feature two", "Feature three"),
+      ),
+    ),
+  ],
+};
+
+/**
+ * Agenda Layout
+ *
+ * A layout designed for meeting agendas or presentation outlines.
+ *
+ * Structure:
+ * - Heading (level 1): Agenda title
+ * - Ordered list: Agenda items
+ */
+const agendaLayout: SlideLayout = {
+  id: "agenda",
+  name: "Agenda",
+  description: "Meeting agenda or presentation outline",
+  content: [
+    heading(1, "Agenda"),
+    orderedList([
+      "Introduction and welcome",
+      "Review of previous items",
+      "Main discussion topic",
+      "Action items and next steps",
+      "Q&A and closing",
+    ]),
+  ],
+};
+
 /**
  * Section Header Layout
  *
@@ -727,6 +913,18 @@ export const layoutCategories: LayoutCategory[] = [
       sectionHeaderLayout,
       quoteLayout,
       blankLayout,
+    ],
+  },
+  {
+    id: "list",
+    name: "List Layouts",
+    layouts: [
+      bulletListLayout,
+      numberedListLayout,
+      twoColumnListLayout,
+      contentWithListLayout,
+      imageAndListLayout,
+      agendaLayout,
     ],
   },
   {
@@ -842,6 +1040,13 @@ export {
   sectionHeaderLayout,
   quoteLayout,
   blankLayout,
+  // List layouts
+  bulletListLayout,
+  numberedListLayout,
+  twoColumnListLayout,
+  contentWithListLayout,
+  imageAndListLayout,
+  agendaLayout,
   // Image layouts
   imageAndTextLayout,
   textAndImageLayout,
@@ -860,4 +1065,15 @@ export {
 };
 
 // Export helper functions for creating custom layouts
-export { text, heading, paragraph, emptyParagraph, column, row, image };
+export {
+  text,
+  heading,
+  paragraph,
+  emptyParagraph,
+  column,
+  row,
+  image,
+  listItem,
+  bulletList,
+  orderedList,
+};

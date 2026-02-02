@@ -11,6 +11,9 @@ const hoverClassMap: Record<NodeName, string> = {
   [NodeName.COLUMN]: "group-hover/column:flex",
   [NodeName.ROW]: "group-hover/row:flex",
   [NodeName.IMAGE]: "group-hover/image:flex",
+  [NodeName.BULLET_LIST]: "group-hover/bulletList:flex",
+  [NodeName.ORDERED_LIST]: "group-hover/orderedList:flex",
+  [NodeName.LIST_ITEM]: "group-hover/listItem:flex",
 
   // no drag handle for these nodes
   [NodeName.DOC]: "",

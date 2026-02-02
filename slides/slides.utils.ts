@@ -7,6 +7,9 @@ export enum NodeName {
   PARAGRAPH = "paragraph",
   HEADING = "heading",
   IMAGE = "image",
+  BULLET_LIST = "bulletList",
+  ORDERED_LIST = "orderedList",
+  LIST_ITEM = "listItem",
 }
 
 export const getNodeAttributes = <T>({
