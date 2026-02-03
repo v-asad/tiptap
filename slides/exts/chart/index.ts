@@ -44,7 +44,7 @@ export const ChartExt = Node.create({
 
   draggable: false,
 
-  selectable: true,
+  selectable: false,
 
   defining: true,
 

@@ -7,6 +7,10 @@ import { NodeName } from "@/slides/slides.utils";
 export const BulletListExt = BulletList.extend({
   name: NodeName.BULLET_LIST,
 
+  selectable: false,
+
+  draggable: false,
+
   addNodeView() {
     return ReactNodeViewRenderer(BulletListView);
   },

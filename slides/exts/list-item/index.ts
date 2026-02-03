@@ -7,6 +7,10 @@ import { NodeName } from "@/slides/slides.utils";
 export const ListItemExt = ListItem.extend({
   name: NodeName.LIST_ITEM,
 
+  selectable: false,
+
+  draggable: false,
+
   addNodeView() {
     return ReactNodeViewRenderer(ListItemView);
   },

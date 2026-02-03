@@ -324,6 +324,7 @@ export const ChartView = (props: ReactNodeViewProps<HTMLDivElement>) => {
     <DragDropNodeViewProvider
       collisionPriority={CollisionPriority.High}
       className="node-chart px-1 py-1"
+      data-node-type="chart"
       {...props}
     >
       <DropCursor />

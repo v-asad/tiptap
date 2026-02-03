@@ -1,18 +1,7 @@
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { ComponentProps, useState } from "react";
+import { ComponentProps } from "react";
 import { DragHandle } from "../dnd/drag-handle";
 import { ReactNodeViewProps } from "@tiptap/react";
-import { TextSelection } from "@tiptap/pm/state";
-import { FontSizeDropdown } from "./font-size";
-import { FontFamilyDropdown } from "./font-family-dropdown";
-import { DeleteNode } from "./delete-node";
-import { ColumnWidthDropdown } from "./column-width-dropdown";
-import { TextFormatButtons } from "./text-format-buttons";
-import { TextAlignDropdown } from "./text-align-dropdown";
+import { TextSelection, NodeSelection } from "@tiptap/pm/state";
 import { NodeName } from "@/slides/slides.utils";
 
 type NodeActionsProps<T> = ReactNodeViewProps<T> & {
@@ -24,81 +13,42 @@ export function NodeActions<T>({
   getPos,
   dragHandleProps = {},
 }: NodeActionsProps<T>) {
-  const [open, setOpen] = useState(false);
-
-  const selectAll = () => {
+  const handleClick = () => {
     const pos = getPos();
     if (pos === null || pos === undefined) return;
 
     const node = editor.view.state.doc.nodeAt(pos);
     if (!node) return;
 
-    const from = pos + 1;
-    const to = pos + node.nodeSize - 1;
+    const nodeType = node.type.name;
 
-    const tr = editor.state.tr.setSelection(
-      TextSelection.create(editor.state.doc, from, to),
-    );
+    // For text nodes (paragraph, heading): select all text content
+    if (nodeType === NodeName.PARAGRAPH || nodeType === NodeName.HEADING) {
+      const from = pos + 1;
+      const to = pos + node.nodeSize - 1;
 
-    editor.view.dispatch(tr);
+      const tr = editor.state.tr.setSelection(
+        TextSelection.create(editor.state.doc, from, to),
+      );
+
+      editor.view.dispatch(tr);
+    } else {
+      // For row, column, image, chart: create NodeSelection
+      const tr = editor.state.tr.setSelection(
+        NodeSelection.create(editor.state.doc, pos),
+      );
+
+      editor.view.dispatch(tr);
+    }
+
     editor.view.focus();
   };
 
-  const handleClick = () => {
-    setOpen((p) => !p);
-    selectAll();
-  };
-
-  const getNodeType = () => {
-    const pos = getPos();
-    if (pos === null || pos === undefined) return null;
-    const node = editor.state.doc.nodeAt(pos);
-    return node?.type.name ?? null;
-  };
-
-  const nodeType = getNodeType();
-  const isRowNode = nodeType === NodeName.ROW;
-  const showTextStyling =
-    nodeType === NodeName.PARAGRAPH || nodeType === NodeName.HEADING;
-
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverAnchor>
-        <DragHandle
-          className="cursor-pointer"
-          shouldStayVisible={open}
-          onClick={handleClick}
-          {...dragHandleProps}
-        />
-      </PopoverAnchor>
-
-      <PopoverContent
-        contentEditable={false}
-        align="start"
-        side="top"
-        className="p-2 flex gap-2 items-center w-fit"
-      >
-        {showTextStyling && (
-          <>
-            <FontFamilyDropdown editor={editor} />
-            <FontSizeDropdown editor={editor} />
-            <div className="w-px h-6 bg-border" />
-            <TextFormatButtons editor={editor} />
-            <div className="w-px h-6 bg-border" />
-            <TextAlignDropdown editor={editor} />
-            <div className="w-px h-6 bg-border" />
-          </>
-        )}
-
-        {isRowNode && (
-          <>
-            <ColumnWidthDropdown editor={editor} getPos={getPos} />
-            <div className="w-px h-6 bg-border" />
-          </>
-        )}
-
-        <DeleteNode editor={editor} getPos={getPos} />
-      </PopoverContent>
-    </Popover>
+    <DragHandle
+      className="cursor-pointer"
+      onClick={handleClick}
+      {...dragHandleProps}
+    />
   );
 }

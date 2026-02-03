@@ -212,6 +212,7 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
         "mx-0 my-0": imageLayout !== "default",
       })}
       style={getContainerStyle()}
+      data-node-type="image"
       data-image-layout={imageLayout}
       data-image-size={currentSize}
       {...props}

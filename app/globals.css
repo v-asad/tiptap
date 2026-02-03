@@ -183,6 +183,21 @@
   color: white;
 }
 
+/* Node selection indicators */
+.editor-themed [data-node-type="row"].ProseMirror-selectednode,
+.editor-themed [data-node-type="column"].ProseMirror-selectednode {
+  outline: 2px solid var(--editor-secondary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.editor-themed [data-node-type="image"].ProseMirror-selectednode,
+.editor-themed [data-node-type="chart"].ProseMirror-selectednode {
+  outline: 3px solid var(--editor-secondary);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
 /* Chart node theme hooks */
 .editor-themed .node-chart {
   --chart-text: var(--editor-text);

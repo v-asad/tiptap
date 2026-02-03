@@ -15,6 +15,8 @@ export const HeadingExt = Heading.extend({
   draggable: false,
 
   atom: false,
+  
+  selectable: false,
 
   isolating: false,
 

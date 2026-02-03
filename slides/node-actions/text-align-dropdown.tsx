@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 
 type TextAlignDropdownProps = {
   editor: Editor;
+  disabled?: boolean;
 };
 
 const alignments = [
@@ -28,7 +29,7 @@ const alignments = [
 
 type Alignment = (typeof alignments)[number]["value"];
 
-export const TextAlignDropdown = ({ editor }: TextAlignDropdownProps) => {
+export const TextAlignDropdown = ({ editor, disabled }: TextAlignDropdownProps) => {
   const currentAlignment =
     alignments.find((a) => editor.isActive({ textAlign: a.value }))?.value ||
     "left";
@@ -47,6 +48,7 @@ export const TextAlignDropdown = ({ editor }: TextAlignDropdownProps) => {
           variant="ghost"
           size="sm"
           className="flex gap-1 items-center h-8 px-2"
+          disabled={disabled}
         >
           <CurrentIcon className="size-4" />
           <ChevronDownIcon className="size-3" />

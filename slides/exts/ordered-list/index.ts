@@ -7,6 +7,10 @@ import { NodeName } from "@/slides/slides.utils";
 export const OrderedListExt = OrderedList.extend({
   name: NodeName.ORDERED_LIST,
 
+  selectable: false,
+
+  draggable: false,
+
   addNodeView() {
     return ReactNodeViewRenderer(OrderedListView);
   },

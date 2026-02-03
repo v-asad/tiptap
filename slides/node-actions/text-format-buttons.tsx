@@ -10,9 +10,10 @@ import { cn } from "@/lib/utils";
 
 type TextFormatButtonsProps = {
   editor: Editor;
+  disabled?: boolean;
 };
 
-export function TextFormatButtons({ editor }: TextFormatButtonsProps) {
+export function TextFormatButtons({ editor, disabled }: TextFormatButtonsProps) {
   const formats = [
     {
       name: "bold",
@@ -49,6 +50,7 @@ export function TextFormatButtons({ editor }: TextFormatButtonsProps) {
           variant="ghost"
           className={cn(format.isActive() && "bg-accent")}
           onClick={format.toggle}
+          disabled={disabled}
         >
           <format.icon className="size-4" />
         </Button>

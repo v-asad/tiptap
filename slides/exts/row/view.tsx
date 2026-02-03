@@ -65,6 +65,7 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
     <DragDropNodeViewProvider
       collisionPriority={CollisionPriority.Low}
       className="my-4"
+      data-node-type="row"
       {...props}
     >
       <DropCursor />

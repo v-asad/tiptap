@@ -13,9 +13,10 @@ import { fonts, loadFont } from "@/lib/fonts";
 
 type FontFamilyDropdownProps = {
   editor: Editor;
+  disabled?: boolean;
 };
 
-export const FontFamilyDropdown = ({ editor }: FontFamilyDropdownProps) => {
+export const FontFamilyDropdown = ({ editor, disabled }: FontFamilyDropdownProps) => {
   const [currentFont, setCurrentFont] = useState(fonts[0].name);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export const FontFamilyDropdown = ({ editor }: FontFamilyDropdownProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex gap-1 items-center border rounded px-2 h-8 min-w-25 justify-between">
+      <DropdownMenuTrigger className="flex gap-1 items-center border rounded px-2 h-8 min-w-25 justify-between disabled:opacity-50 disabled:cursor-not-allowed" disabled={disabled}>
         <span className="truncate text-sm">{currentFont}</span>
         <ChevronDownIcon className="size-4 shrink-0" />
       </DropdownMenuTrigger>

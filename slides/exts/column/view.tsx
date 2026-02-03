@@ -92,6 +92,7 @@ export const ColumnView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
       className={cn(
         "py-2 px-6 border border-transparent group-hover/row:border-border",
       )}
+      data-node-type="column"
       {...props}
     >
       <DropCursor />

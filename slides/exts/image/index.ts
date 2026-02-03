@@ -20,7 +20,7 @@ export const ImageExt = Image.extend({
 
   atom: true,
 
-  selectable: true,
+  selectable: false,
 
   defining: true,
 

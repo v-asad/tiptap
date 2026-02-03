@@ -14,6 +14,8 @@ export const ParagraphExt = Paragraph.extend({
 
   draggable: false,
 
+  selectable: false,
+
   atom: false,
 
   isolating: false,
