@@ -100,8 +100,7 @@ const image = (
   layout: ImageLayout = "default",
   size: string = "50",
 ): string => {
-  const srcAttr = src ? ` src="${escapeAttr(src)}"` : "";
-  return `<img${srcAttr} size="${size}" layout="${layout}">`;
+  return `<img src="${src ? escapeAttr(src) : ""}" size="${size}" layout="${layout}">`;
 };
 
 /**
