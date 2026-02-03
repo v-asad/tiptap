@@ -1,3 +1,5 @@
+import { fonts } from "./fonts";
+
 export interface EditorTheme {
   name: string;
   bgColor: string;
@@ -13,20 +15,10 @@ export interface CustomEditorTheme extends EditorTheme {
   isCustom: true;
 }
 
-export const AVAILABLE_FONTS = [
-  { name: "Inter", value: "'Inter', sans-serif" },
-  { name: "DM Sans", value: "'DM Sans', sans-serif" },
-  { name: "Poppins", value: "'Poppins', sans-serif" },
-  { name: "Space Grotesk", value: "'Space Grotesk', sans-serif" },
-  { name: "Sora", value: "'Sora', sans-serif" },
-  { name: "Nunito", value: "'Nunito', sans-serif" },
-  { name: "Playfair Display", value: "'Playfair Display', serif" },
-  { name: "Source Sans Pro", value: "'Source Sans Pro', sans-serif" },
-  { name: "IBM Plex Sans", value: "'IBM Plex Sans', sans-serif" },
-  { name: "Georgia", value: "'Georgia', serif" },
-  { name: "Verdana", value: "'Verdana', sans-serif" },
-  { name: "Trebuchet MS", value: "'Trebuchet MS', sans-serif" },
-];
+export const AVAILABLE_FONTS = fonts.map((font) => ({
+  name: font.name,
+  value: font.cssValue,
+}));
 
 export const themes: EditorTheme[] = [
   {
@@ -44,7 +36,7 @@ export const themes: EditorTheme[] = [
     secondaryColor: "#60a5fa",
     textColor: "#f1f5f9",
     linkColor: "#93c5fd",
-    titleFont: "'Inter', sans-serif",
+    titleFont: "'Montserrat', sans-serif",
     bodyFont: "'Inter', sans-serif",
   },
   {
@@ -53,8 +45,8 @@ export const themes: EditorTheme[] = [
     secondaryColor: "#d97706",
     textColor: "#451a03",
     linkColor: "#b45309",
-    titleFont: "'Georgia', serif",
-    bodyFont: "'Georgia', serif",
+    titleFont: "'Playfair Display', serif",
+    bodyFont: "'Merriweather', serif",
   },
   {
     name: "Ocean",
@@ -62,8 +54,8 @@ export const themes: EditorTheme[] = [
     secondaryColor: "#06b6d4",
     textColor: "#164e63",
     linkColor: "#0891b2",
-    titleFont: "'Verdana', sans-serif",
-    bodyFont: "'Verdana', sans-serif",
+    titleFont: "'Raleway', sans-serif",
+    bodyFont: "'Open Sans', sans-serif",
   },
   {
     name: "Forest",
@@ -71,8 +63,8 @@ export const themes: EditorTheme[] = [
     secondaryColor: "#22c55e",
     textColor: "#14532d",
     linkColor: "#16a34a",
-    titleFont: "'Trebuchet MS', sans-serif",
-    bodyFont: "'Trebuchet MS', sans-serif",
+    titleFont: "'Lato', sans-serif",
+    bodyFont: "'Lato', sans-serif",
   },
   {
     name: "Midnight Pro",
@@ -89,8 +81,8 @@ export const themes: EditorTheme[] = [
     secondaryColor: "#78716C",
     textColor: "#1C1917",
     linkColor: "#D97706",
-    titleFont: "'Playfair Display', sans-serif",
-    bodyFont: "'Source Sans Pro', sans-serif",
+    titleFont: "'Playfair Display', serif",
+    bodyFont: "'Source Sans 3', sans-serif",
   },
   {
     name: "Ocean Breeze",

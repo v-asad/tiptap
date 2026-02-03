@@ -8,6 +8,7 @@ import { DragHandle } from "../dnd/drag-handle";
 import { ReactNodeViewProps } from "@tiptap/react";
 import { TextSelection } from "@tiptap/pm/state";
 import { FontSizeDropdown } from "./font-size";
+import { FontFamilyDropdown } from "./font-family-dropdown";
 import { DeleteNode } from "./delete-node";
 import { ColumnWidthDropdown } from "./column-width-dropdown";
 import { TextFormatButtons } from "./text-format-buttons";
@@ -48,12 +49,17 @@ export function NodeActions<T>({
     selectAll();
   };
 
-  const isRowNode = () => {
+  const getNodeType = () => {
     const pos = getPos();
-    if (pos === null || pos === undefined) return false;
+    if (pos === null || pos === undefined) return null;
     const node = editor.state.doc.nodeAt(pos);
-    return node?.type.name === NodeName.ROW;
+    return node?.type.name ?? null;
   };
+
+  const nodeType = getNodeType();
+  const isRowNode = nodeType === NodeName.ROW;
+  const showTextStyling =
+    nodeType === NodeName.PARAGRAPH || nodeType === NodeName.HEADING;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,20 +78,25 @@ export function NodeActions<T>({
         side="top"
         className="p-2 flex gap-2 items-center w-fit"
       >
-        <FontSizeDropdown editor={editor} />
-        <div className="w-px h-6 bg-border" />
-        <TextFormatButtons editor={editor} />
-        <div className="w-px h-6 bg-border" />
-        <TextAlignDropdown editor={editor} />
-
-        {isRowNode() && (
+        {showTextStyling && (
           <>
+            <FontFamilyDropdown editor={editor} />
+            <FontSizeDropdown editor={editor} />
             <div className="w-px h-6 bg-border" />
-            <ColumnWidthDropdown editor={editor} getPos={getPos} />
+            <TextFormatButtons editor={editor} />
+            <div className="w-px h-6 bg-border" />
+            <TextAlignDropdown editor={editor} />
+            <div className="w-px h-6 bg-border" />
           </>
         )}
 
-        <div className="w-px h-6 bg-border" />
+        {isRowNode && (
+          <>
+            <ColumnWidthDropdown editor={editor} getPos={getPos} />
+            <div className="w-px h-6 bg-border" />
+          </>
+        )}
+
         <DeleteNode editor={editor} getPos={getPos} />
       </PopoverContent>
     </Popover>

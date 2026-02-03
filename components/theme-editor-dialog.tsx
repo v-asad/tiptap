@@ -25,6 +25,7 @@ import {
   AVAILABLE_FONTS,
   DEFAULT_THEME,
 } from "@/lib/themes";
+import { fonts, loadFont } from "@/lib/fonts";
 
 interface ThemeEditorDialogProps {
   open: boolean;
@@ -219,13 +220,24 @@ export function ThemeEditorDialog({
             {/* Fonts */}
             <div className="space-y-2">
               <Label htmlFor="titleFont">Title Font</Label>
-              <Select value={titleFont} onValueChange={setTitleFont}>
+              <Select
+                value={titleFont}
+                onValueChange={(value) => {
+                  const font = fonts.find((f) => f.cssValue === value);
+                  if (font) loadFont(font);
+                  setTitleFont(value);
+                }}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {AVAILABLE_FONTS.map((font) => (
-                    <SelectItem key={font.value} value={font.value}>
+                  {AVAILABLE_FONTS.map((font, index) => (
+                    <SelectItem
+                      key={font.value}
+                      value={font.value}
+                      onMouseEnter={() => loadFont(fonts[index])}
+                    >
                       <span style={{ fontFamily: font.value }}>
                         {font.name}
                       </span>
@@ -237,13 +249,24 @@ export function ThemeEditorDialog({
 
             <div className="space-y-2">
               <Label htmlFor="bodyFont">Body Font</Label>
-              <Select value={bodyFont} onValueChange={setBodyFont}>
+              <Select
+                value={bodyFont}
+                onValueChange={(value) => {
+                  const font = fonts.find((f) => f.cssValue === value);
+                  if (font) loadFont(font);
+                  setBodyFont(value);
+                }}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {AVAILABLE_FONTS.map((font) => (
-                    <SelectItem key={font.value} value={font.value}>
+                  {AVAILABLE_FONTS.map((font, index) => (
+                    <SelectItem
+                      key={font.value}
+                      value={font.value}
+                      onMouseEnter={() => loadFont(fonts[index])}
+                    >
                       <span style={{ fontFamily: font.value }}>
                         {font.name}
                       </span>
