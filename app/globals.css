@@ -183,6 +183,21 @@
   color: white;
 }
 
+/* Chart node theme hooks */
+.editor-themed .node-chart {
+  --chart-text: var(--editor-text);
+  --chart-muted: color-mix(in oklab, var(--editor-text) 55%, var(--editor-bg));
+  --chart-grid: color-mix(in oklab, var(--editor-text) 20%, var(--editor-bg));
+  --chart-accent: var(--editor-link);
+  --chart-secondary: var(--editor-secondary);
+  --chart-border: color-mix(
+    in oklab,
+    var(--editor-secondary) 60%,
+    var(--editor-bg)
+  );
+  --chart-bg: color-mix(in oklab, var(--editor-bg) 88%, white);
+}
+
 /* Full-bleed image layout spacing */
 .editor-themed .ProseMirror:has([data-image-layout="full-left"]) {
   padding-left: calc(var(--image-left-size, 50%) + 1.5rem);

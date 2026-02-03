@@ -75,6 +75,20 @@ type ImageLayout =
   | "full-left"
   | "full-right";
 
+type ChartType = "line" | "bar" | "pie";
+
+type ChartDatum = {
+  label: string;
+  value: number;
+};
+
+const defaultChartData: ChartDatum[] = [
+  { label: "Q1", value: 32 },
+  { label: "Q2", value: 48 },
+  { label: "Q3", value: 27 },
+  { label: "Q4", value: 58 },
+];
+
 /**
  * Creates an image node with optional src and layout
  * @param src - Optional image URL (null for placeholder)
@@ -86,6 +100,19 @@ const image = (
 ): JSONContent => ({
   type: "image",
   attrs: { src, layout },
+});
+
+/**
+ * Creates a chart node with specified type and data
+ * @param chartType - Chart type (line, bar, pie)
+ * @param data - Array of { label, value } pairs
+ */
+const chart = (
+  chartType: ChartType = "bar",
+  data: ChartDatum[] = defaultChartData,
+): JSONContent => ({
+  type: "chart",
+  attrs: { chartType, data },
 });
 
 /**
@@ -881,6 +908,42 @@ const sectionHeaderLayout: SlideLayout = {
   content: [heading(3, "Section 01"), heading(1, "Section Title")],
 };
 
+/**
+ * Line Chart Layout
+ *
+ * A layout with a title and a line chart below.
+ */
+const lineChartLayout: SlideLayout = {
+  id: "line-chart",
+  name: "Line Chart",
+  description: "A title with a line chart",
+  content: [heading(1, "Performance Over Time"), chart("line")],
+};
+
+/**
+ * Bar Chart Layout
+ *
+ * A layout with a title and a bar chart below.
+ */
+const barChartLayout: SlideLayout = {
+  id: "bar-chart",
+  name: "Bar Chart",
+  description: "A title with a bar chart",
+  content: [heading(1, "Category Breakdown"), chart("bar")],
+};
+
+/**
+ * Pie Chart Layout
+ *
+ * A layout with a title and a pie chart below.
+ */
+const pieChartLayout: SlideLayout = {
+  id: "pie-chart",
+  name: "Pie Chart",
+  description: "A title with a pie chart",
+  content: [heading(1, "Share of Total"), chart("pie")],
+};
+
 // ============================================================================
 // Exports
 // ============================================================================
@@ -951,6 +1014,11 @@ export const layoutCategories: LayoutCategory[] = [
       imageHeaderLayout,
       imageFooterLayout,
     ],
+  },
+  {
+    id: "charts",
+    name: "Chart Layouts",
+    layouts: [lineChartLayout, barChartLayout, pieChartLayout],
   },
 ];
 
@@ -1062,6 +1130,10 @@ export {
   fullImageRightLayout,
   imageHeaderLayout,
   imageFooterLayout,
+  // Chart layouts
+  lineChartLayout,
+  barChartLayout,
+  pieChartLayout,
 };
 
 // Export helper functions for creating custom layouts
@@ -1073,6 +1145,7 @@ export {
   column,
   row,
   image,
+  chart,
   listItem,
   bulletList,
   orderedList,

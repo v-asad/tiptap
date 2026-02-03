@@ -7,6 +7,7 @@ export enum NodeName {
   PARAGRAPH = "paragraph",
   HEADING = "heading",
   IMAGE = "image",
+  CHART = "chart",
   BULLET_LIST = "bulletList",
   ORDERED_LIST = "orderedList",
   LIST_ITEM = "listItem",

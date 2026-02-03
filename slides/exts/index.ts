@@ -15,6 +15,7 @@ import { ColumnExt } from "../exts/column";
 import { RowExt } from "../exts/row";
 import { LinkExt } from "../exts/link";
 import { ImageExt } from "../exts/image";
+import { ChartExt } from "../exts/chart";
 import { BulletListExt } from "../exts/bullet-list";
 import { OrderedListExt } from "../exts/ordered-list";
 import { ListItemExt } from "../exts/list-item";
@@ -34,6 +35,7 @@ export const availableExtensions = [
   ParagraphExt,
   HeadingExt,
   ImageExt,
+  ChartExt,
   ColumnExt,
   RowExt,
   LinkExt,

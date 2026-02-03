@@ -7,7 +7,12 @@ type UseAcceptedNodesParams<T> = Pick<
   "getPos" | "editor" | "node"
 >;
 
-const LEAF_NODES = [NodeName.HEADING, NodeName.PARAGRAPH, NodeName.IMAGE];
+const LEAF_NODES = [
+  NodeName.HEADING,
+  NodeName.PARAGRAPH,
+  NodeName.IMAGE,
+  NodeName.CHART,
+];
 const BRANCH_NODES = [NodeName.COLUMN, NodeName.ROW];
 const LIST_NODES = [
   NodeName.BULLET_LIST,
@@ -34,6 +39,7 @@ export const useAcceptedNodes = <T>({
       case NodeName.HEADING:
       case NodeName.PARAGRAPH:
       case NodeName.IMAGE:
+      case NodeName.CHART:
         if (parentName === NodeName.DOC)
           return [...LEAF_NODES, ...BRANCH_NODES, ...LIST_NODES];
         return LEAF_NODES;

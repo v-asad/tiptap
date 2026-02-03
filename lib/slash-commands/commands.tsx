@@ -13,8 +13,12 @@ import {
   Columns2,
   Columns3,
   Columns4,
+  BarChart3,
+  LineChart,
+  PieChart,
 } from "lucide-react";
 import type { SlashCommand } from "./types";
+import { DEFAULT_CHART_DATA } from "@/slides/exts/chart";
 
 export const defaultCommands: SlashCommand[] = [
   {
@@ -65,6 +69,57 @@ export const defaultCommands: SlashCommand[] = [
     keywords: ["image", "img", "picture", "photo"],
     action: (editor) => {
       editor.chain().focus().insertContent({ type: "image" }).run();
+    },
+  },
+  {
+    id: "lineChart",
+    title: "Line Chart",
+    description: "Insert a line chart",
+    icon: <LineChart className="h-4 w-4" />,
+    keywords: ["chart", "line", "trend", "graph"],
+    action: (editor) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "chart",
+          attrs: { chartType: "line", data: DEFAULT_CHART_DATA },
+        })
+        .run();
+    },
+  },
+  {
+    id: "barChart",
+    title: "Bar Chart",
+    description: "Insert a bar chart",
+    icon: <BarChart3 className="h-4 w-4" />,
+    keywords: ["chart", "bar", "histogram", "graph"],
+    action: (editor) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "chart",
+          attrs: { chartType: "bar", data: DEFAULT_CHART_DATA },
+        })
+        .run();
+    },
+  },
+  {
+    id: "pieChart",
+    title: "Pie Chart",
+    description: "Insert a pie chart",
+    icon: <PieChart className="h-4 w-4" />,
+    keywords: ["chart", "pie", "share", "graph"],
+    action: (editor) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "chart",
+          attrs: { chartType: "pie", data: DEFAULT_CHART_DATA },
+        })
+        .run();
     },
   },
   {

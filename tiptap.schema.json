@@ -12,7 +12,7 @@
     "htmlTag": "p"
   },
   "doc": {
-    "content": "(row | paragraph | heading | image | bulletList | orderedList)+",
+    "content": "(row | paragraph | heading | image | chart | bulletList | orderedList)+",
     "group": null,
     "inline": false,
     "attrs": {}
@@ -59,6 +59,25 @@
     },
     "htmlTag": "img"
   },
+  "chart": {
+    "group": "block",
+    "attrs": {
+      "chartType": {
+        "default": "bar",
+        "allowedValues": ["line", "bar", "pie"]
+      },
+      "data": {
+        "default": [
+          { "label": "Q1", "value": 32 },
+          { "label": "Q2", "value": 48 },
+          { "label": "Q3", "value": 27 },
+          { "label": "Q4", "value": 58 }
+        ],
+        "description": "Array of { label, value } pairs for the chart data."
+      }
+    },
+    "htmlTag": "chart"
+  },
   "column": {
     "content": "block+",
     "group": "block",
@@ -80,16 +99,16 @@
     "content": "listItem+",
     "group": "block list",
     "attrs": {},
-    "html": "ul"
+    "htmlTag": "ul"
   },
   "orderedList": {
     "content": "listItem+",
     "group": "block list",
-    "html": "ol"
+    "htmlTag": "ol"
   },
   "listItem": {
     "content": "paragraph block*",
     "attrs": {},
-    "html": "li"
+    "htmlTag": "li"
   }
 }
