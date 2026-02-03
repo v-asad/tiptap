@@ -44,7 +44,7 @@ export const SlidePreview: React.FC<SlidePreviewProps> = ({ content }) => {
           editor={editor}
           className={cn(
             "editor-themed size-full",
-            "*:flex *:flex-col *:justify-center *:focus:outline-none *:h-full *:p-10",
+            "[&_.ProseMirror]:flex [&_.ProseMirror]:flex-col [&_.ProseMirror]:justify-center [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:h-full [&_.ProseMirror]:p-10",
           )}
         />
       </div>

@@ -48,7 +48,7 @@ export const SlideEditor = () => {
           <DnDProvider>
             <EditorContent
               editor={editor}
-              className="h-full *:flex *:flex-col *:justify-center *:p-10 *:focus:outline-none *:h-full"
+              className="h-full [&_.ProseMirror]:flex [&_.ProseMirror]:flex-col [&_.ProseMirror]:justify-center [&_.ProseMirror]:p-10 [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:h-full"
             />
           </DnDProvider>
         </div>
