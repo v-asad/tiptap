@@ -55,6 +55,14 @@
       "size": {
         "default": null,
         "description": "When the layout value is not default, size attribute defines the width or height of image"
+      },
+      "width": {
+        "default": null,
+        "description": "Pixel width for resizable images"
+      },
+      "height": {
+        "default": null,
+        "description": "Pixel height for resizable images"
       }
     },
     "htmlTag": "img"

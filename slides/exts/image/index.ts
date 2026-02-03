@@ -11,7 +11,15 @@ export type ImageLayout =
   | "full-left"
   | "full-right";
 
-export const ImageExt = Image.extend({
+export const ImageExt = Image.configure({
+  resize: {
+    enabled: true,
+    directions: ["bottom-right"],
+    minWidth: 50,
+    minHeight: 50,
+    alwaysPreserveAspectRatio: false,
+  },
+}).extend({
   name: NodeName.IMAGE,
 
   group: "block",
@@ -35,6 +43,28 @@ export const ImageExt = Image.extend({
       // For full-left/full-right: this is the width percentage (0-100)
       size: {
         default: null,
+      },
+      width: {
+        default: null,
+        parseHTML: (element) => {
+          const value = element.getAttribute("width");
+          return value ? Number.parseFloat(value) : null;
+        },
+        renderHTML: (attrs) => {
+          if (!attrs.width) return {};
+          return { width: attrs.width };
+        },
+      },
+      height: {
+        default: null,
+        parseHTML: (element) => {
+          const value = element.getAttribute("height");
+          return value ? Number.parseFloat(value) : null;
+        },
+        renderHTML: (attrs) => {
+          if (!attrs.height) return {};
+          return { height: attrs.height };
+        },
       },
     };
   },

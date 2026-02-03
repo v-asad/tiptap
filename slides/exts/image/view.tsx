@@ -1,6 +1,6 @@
 import { ReactNodeViewProps } from "@tiptap/react";
 import { ImageIcon } from "lucide-react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import { DragDropNodeViewProvider } from "@/slides/dnd/dnd-node-view";
 import { DropCursor } from "@/slides/dnd/drop-cursor";
@@ -13,6 +13,14 @@ import { cn } from "@/lib/utils";
 const DEFAULT_HEIGHT = 192; // 12rem = 192px (h-48)
 const DEFAULT_WIDTH_PERCENT = 50;
 
+const DEFAULT_RESIZE_OPTIONS = {
+  enabled: true,
+  directions: ["bottom-right"] as const,
+  minWidth: 50,
+  minHeight: 50,
+  alwaysPreserveAspectRatio: false,
+};
+
 const layoutClasses: Record<ImageLayout, string> = {
   default: "px-1 py-1",
   "full-top": "absolute top-0 left-0 right-0 z-10",
@@ -22,7 +30,7 @@ const layoutClasses: Record<ImageLayout, string> = {
 };
 
 const imageClasses: Record<ImageLayout, string> = {
-  default: "w-full h-auto rounded object-cover",
+  default: "w-full h-auto object-cover",
   "full-top": "w-full h-full object-cover",
   "full-bottom": "w-full h-full object-cover",
   "full-left": "w-full h-full object-cover",
@@ -44,6 +52,12 @@ const placeholderClasses: Record<ImageLayout, string> = {
 
 type ResizeDirection = "vertical" | "horizontal";
 
+type ResizeHandleDirection =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+
 export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
   const { src, alt, layout = "default", size } = props.node.attrs;
   const { editor, updateAttributes } = props;
@@ -53,6 +67,16 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
   const startSizeRef = useRef<number>(0);
   const directionRef = useRef<ResizeDirection>("vertical");
 
+  const imageRef = useRef<HTMLImageElement>(null);
+  const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const startBoxRef = useRef<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
+  const handleDirRef = useRef<ResizeHandleDirection>("bottom-right");
+
+  const [isResizing, setResizing] = useState(false);
+
   const getDefaultSize = () => {
     if (imageLayout === "full-top" || imageLayout === "full-bottom") {
       return DEFAULT_HEIGHT;
@@ -61,6 +85,8 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
   };
 
   const currentSize = size ?? getDefaultSize();
+  const currentWidth = props.node.attrs.width as number | null;
+  const currentHeight = props.node.attrs.height as number | null;
 
   // Update CSS custom properties on the editor for dynamic padding
   useEffect(() => {
@@ -126,10 +152,7 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
     }
   };
 
-  const initiateResize = (
-    e: React.MouseEvent,
-    direction: ResizeDirection
-  ) => {
+  const initiateResize = (e: React.MouseEvent, direction: ResizeDirection) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -154,6 +177,88 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
     };
 
     window.addEventListener("mousemove", handleResize);
+    window.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleDefaultResize = (e: MouseEvent) => {
+    const start = startPointRef.current;
+    const startBox = startBoxRef.current;
+    const dir = handleDirRef.current;
+
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+
+    let nextWidth = startBox.width;
+    let nextHeight = startBox.height;
+
+    if (dir.includes("left")) {
+      nextWidth = startBox.width - dx;
+    }
+    if (dir.includes("right")) {
+      nextWidth = startBox.width + dx;
+    }
+    if (dir.includes("top")) {
+      nextHeight = startBox.height - dy;
+    }
+    if (dir.includes("bottom")) {
+      nextHeight = startBox.height + dy;
+    }
+
+    nextWidth = Math.max(DEFAULT_RESIZE_OPTIONS.minWidth, nextWidth);
+    nextHeight = Math.max(DEFAULT_RESIZE_OPTIONS.minHeight, nextHeight);
+
+    if (DEFAULT_RESIZE_OPTIONS.alwaysPreserveAspectRatio) {
+      const ratio = startBox.height > 0 ? startBox.width / startBox.height : 1;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        nextHeight = nextWidth / ratio;
+      } else {
+        nextWidth = nextHeight * ratio;
+      }
+    }
+
+    updateAttributes({
+      width: Math.round(nextWidth),
+      height: Math.round(nextHeight),
+    });
+  };
+
+  const initiateDefaultResize = (
+    e: React.MouseEvent,
+    direction: ResizeHandleDirection,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const imgEl = imageRef.current;
+    if (!imgEl) return;
+
+    const rect = imgEl.getBoundingClientRect();
+
+    startPointRef.current = { x: e.clientX, y: e.clientY };
+    startBoxRef.current = {
+      width: currentWidth ?? rect.width,
+      height: currentHeight ?? rect.height,
+    };
+    handleDirRef.current = direction;
+
+    // eslint-disable-next-line
+    document.body.style.userSelect = "none";
+    // eslint-disable-next-line
+    document.body.style.cursor = "nwse-resize";
+
+    const handleMouseUp = () => {
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+
+      setResizing(false);
+
+      window.removeEventListener("mousemove", handleDefaultResize);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    setResizing(true);
+
+    window.addEventListener("mousemove", handleDefaultResize);
     window.addEventListener("mouseup", handleMouseUp);
   };
 
@@ -191,15 +296,51 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
         contentEditable={false}
         className={cn(
           "absolute z-20 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity",
-          handlePositionClasses[imageLayout]
+          handlePositionClasses[imageLayout],
         )}
         onMouseDown={(e) => initiateResize(e, direction)}
       >
         <div
           className={cn(
             "bg-blue-400 hover:bg-blue-500 transition-colors",
-            handleBarClasses[imageLayout]
+            handleBarClasses[imageLayout],
           )}
+        />
+      </div>
+    );
+  };
+
+  const renderDefaultResizeHandles = () => {
+    if (imageLayout !== "default") return null;
+    if (!DEFAULT_RESIZE_OPTIONS.enabled || !src) return null;
+
+    const handleBase =
+      "absolute size-3 bg-transparent border-r-2 border-b-2 border-[var(--editor-text)] shadow-sm";
+
+    const handle: {
+      dir: ResizeHandleDirection;
+      className: string;
+      cursor: string;
+    } = {
+      dir: "bottom-right",
+      className: "-bottom-1 -right-1",
+      cursor: "nwse-resize",
+    };
+
+    return (
+      <div
+        className={cn("absolute inset-0", {
+          "hidden group-hover/image:flex": true,
+          flex: isResizing,
+        })}
+      >
+        <button
+          key={handle.dir}
+          type="button"
+          aria-label={`Resize ${handle.dir}`}
+          className={cn(handleBase, handle.className)}
+          style={{ cursor: handle.cursor }}
+          onMouseDown={(event) => initiateDefaultResize(event, handle.dir)}
         />
       </div>
     );
@@ -220,15 +361,37 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
       <DropCursor />
       <NodeActions {...props} />
 
-      {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt || ""} className={imageClasses[imageLayout]} />
-      ) : (
-        <ImagePlaceholder
-          onClick={handlePlaceholderClick}
-          layout={imageLayout}
-        />
-      )}
+      <div
+        className={cn({
+          "relative inline-block max-w-full": imageLayout === "default",
+        })}
+        contentEditable={false}
+      >
+        {src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            ref={imageRef}
+            src={src}
+            alt={alt || ""}
+            className={imageClasses[imageLayout]}
+            style={
+              imageLayout === "default" && (currentWidth || currentHeight)
+                ? {
+                    width: currentWidth ?? undefined,
+                    height: currentHeight ?? undefined,
+                  }
+                : undefined
+            }
+          />
+        ) : (
+          <ImagePlaceholder
+            onClick={handlePlaceholderClick}
+            layout={imageLayout}
+          />
+        )}
+
+        {renderDefaultResizeHandles()}
+      </div>
 
       {renderResizeHandle()}
     </DragDropNodeViewProvider>
