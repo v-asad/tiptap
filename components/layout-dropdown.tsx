@@ -66,7 +66,7 @@ export function LayoutDropdown() {
                       "flex flex-col items-start gap-0.5 rounded-md border px-3 py-2 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
                       currentLayout.id === layout.id
                         ? "border-primary bg-accent"
-                        : "border-border"
+                        : "border-border",
                     )}
                   >
                     <div className="flex w-full items-center justify-between">

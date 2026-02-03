@@ -98,9 +98,10 @@ const defaultChartData: ChartDatum[] = [
 const image = (
   src: string | null = null,
   layout: ImageLayout = "default",
+  size: string = "50",
 ): string => {
   const srcAttr = src ? ` src="${escapeAttr(src)}"` : "";
-  return `<img${srcAttr} layout="${layout}">`;
+  return `<img${srcAttr} size="${size}" layout="${layout}">`;
 };
 
 /**
@@ -128,15 +129,13 @@ const column = (...children: string[]): string =>
  * Note: Maximum of 4 columns per row (enforced by ROW_CONFIG.MAX_COL_COUNT)
  * @param columns - Array of column nodes
  */
-const row = (...columns: string[]): string =>
-  `<row>${columns.join("")}</row>`;
+const row = (...columns: string[]): string => `<row>${columns.join("")}</row>`;
 
 /**
  * Creates a list item node with optional text content
  * @param content - Text content for the list item (creates a paragraph inside)
  */
-const listItem = (content: string): string =>
-  `<li>${paragraph(content)}</li>`;
+const listItem = (content: string): string => `<li>${paragraph(content)}</li>`;
 
 /**
  * Creates a bullet list node with the specified items
@@ -563,7 +562,10 @@ const imageGalleryLayout: SlideLayout = {
   id: "image-gallery",
   name: "Image Gallery",
   description: "Title with three images in a row",
-  content: wrap(heading(1, "Gallery Title"), row(column(image()), column(image()), column(image()))),
+  content: wrap(
+    heading(1, "Gallery Title"),
+    row(column(image()), column(image()), column(image())),
+  ),
 };
 
 // ============================================================================
@@ -795,7 +797,11 @@ const twoColumnListLayout: SlideLayout = {
       ),
       column(
         heading(2, "Cons"),
-        bulletList("Disadvantage one", "Disadvantage two", "Disadvantage three"),
+        bulletList(
+          "Disadvantage one",
+          "Disadvantage two",
+          "Disadvantage three",
+        ),
       ),
     ),
   ),

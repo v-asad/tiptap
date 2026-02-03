@@ -15,8 +15,6 @@ export const ImageExt = Image.configure({
   resize: {
     enabled: true,
     directions: ["bottom-right"],
-    minWidth: 50,
-    minHeight: 50,
     alwaysPreserveAspectRatio: false,
   },
 }).extend({

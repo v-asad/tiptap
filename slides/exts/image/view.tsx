@@ -360,7 +360,7 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
       <NodeActions {...props} />
 
       <div
-        className={cn("h-full", {
+        className={cn("size-full", {
           "relative inline-block max-w-full": imageLayout === "default",
         })}
         contentEditable={false}

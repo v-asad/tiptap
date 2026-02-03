@@ -35,19 +35,18 @@ export const SlidePreview: React.FC<SlidePreviewProps> = ({ content }) => {
   }, [editor, content]);
 
   return (
-    <div className="relative size-full bg-yellow-200 pointer-events-none">
-      <div
-        className="scale-[0.162] origin-top-left"
+    <div className="relative">
+      <EditorContent
+        editor={editor}
+        className={cn(
+          "size-full overflow-y-hidden flex items-start justify-start",
+          "[&_.ProseMirror]:flex [&_.ProseMirror]:flex-col [&_.ProseMirror]:justify-center [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:h-full [&_.ProseMirror]:p-10",
+          "[&_.ProseMirror]:min-h-full [&_.ProseMirror]:w-full",
+          "[&_.ProseMirror]:editor-themed [&_.ProseMirror]:bg-(--editor-bg) [&_.ProseMirror]:text-(--editor-text) font-(--editor-body-font)",
+          "scale-[0.162] origin-top-left pointer-events-none",
+        )}
         style={{ height: `${SLIDE_HEIGHT}px`, width: `${SLIDE_WIDTH}px` }}
-      >
-        <EditorContent
-          editor={editor}
-          className={cn(
-            "editor-themed size-full",
-            "[&_.ProseMirror]:flex [&_.ProseMirror]:flex-col [&_.ProseMirror]:justify-center [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:h-full [&_.ProseMirror]:p-10",
-          )}
-        />
-      </div>
+      />
     </div>
   );
 };
