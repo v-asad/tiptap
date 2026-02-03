@@ -34,8 +34,10 @@ import {
   LineChart,
   PieChart,
   ChevronDownIcon,
+  FileJsonIcon,
 } from "lucide-react";
 import { DEFAULT_CHART_DATA } from "../exts/chart";
+import { layouts } from "../layouts";
 
 export const EditorToolbar = () => {
   const { editor, selectionState } = useSlideEditorContext();
@@ -55,6 +57,25 @@ export const EditorToolbar = () => {
     hasNodeSelection &&
     (selectionState.nodeType === NodeName.ROW ||
       selectionState.nodeType === NodeName.COLUMN);
+
+  const handleExportLayouts = () => {
+    const exportData = layouts.map((layout) => ({
+      title: layout.name,
+      description: layout.description || "",
+      content: layout.content,
+    }));
+
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "layouts.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
 
   const deleteSelectedNode = () => {
     if (!hasSelection) return;
@@ -205,6 +226,10 @@ export const EditorToolbar = () => {
         <div className="flex items-center gap-2">
           <ExportTemplate />
           <ImportTemplate />
+          <Button variant="outline" onClick={handleExportLayouts}>
+            <FileJsonIcon className="size-4" />
+            <span>Export Layouts</span>
+          </Button>
         </div>
       </div>
 
