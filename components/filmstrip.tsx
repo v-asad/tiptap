@@ -37,9 +37,9 @@ export const Filmstrip: React.FC = () => {
   };
 
   return (
-    <div className="filmstrip flex flex-col h-full w-56 border-r border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-700">
+    <div className="filmstrip flex flex-col max-h-screen h-full w-56 border-r border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-700">
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+        <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 sticky top-0 z-50">
           Slides ({slidePreviews.length})
         </h2>
         <Button

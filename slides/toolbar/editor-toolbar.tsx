@@ -91,7 +91,7 @@ export const EditorToolbar = () => {
       if (parentNode) {
         const tr = editor.state.tr.delete(
           parentPos,
-          parentPos + parentNode.nodeSize
+          parentPos + parentNode.nodeSize,
         );
         editor.view.dispatch(tr);
       }
@@ -218,7 +218,7 @@ export const EditorToolbar = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-2 sticky top-0 z-50 bg-background p-4">
       {/* Row 1: Theme, Export/Import */}
       <div className="flex items-center justify-between gap-2">
         <ThemeDropdown />

@@ -241,9 +241,7 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
     };
     handleDirRef.current = direction;
 
-    // eslint-disable-next-line
     document.body.style.userSelect = "none";
-    // eslint-disable-next-line
     document.body.style.cursor = "nwse-resize";
 
     const handleMouseUp = () => {
@@ -362,7 +360,7 @@ export const ImageView = (props: ReactNodeViewProps<HTMLImageElement>) => {
       <NodeActions {...props} />
 
       <div
-        className={cn({
+        className={cn("h-full", {
           "relative inline-block max-w-full": imageLayout === "default",
         })}
         contentEditable={false}

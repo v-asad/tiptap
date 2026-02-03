@@ -6,7 +6,7 @@ import { CatsTemplate } from "@/slides/templates";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-start gap-0 bg-zinc-50 p-0 font-sans dark:bg-black">
+    <div className="flex min-h-screen flex-col items-center justify-start gap-0 bg-background p-0 font-sans dark:bg-black">
       <EditorThemeProvider defaultTheme={CatsTemplate.theme}>
         <SlidePreviewsProvider>
           <SlideEditorProvider>

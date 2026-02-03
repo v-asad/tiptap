@@ -22,33 +22,35 @@ export const SlideEditor = () => {
     <div className="flex w-full gap-0 relative">
       <Filmstrip />
 
-      <div className="flex-1 flex flex-col gap-4 p-4">
+      <div className="flex-1 flex items-start justify-start flex-col gap-4">
         <EditorToolbar />
 
-        <div
-          className="editor-themed aspect-video w-full max-w-7xl rounded-lg shadow-2xl relative overflow-hidden"
-          style={{
-            minHeight: `${SLIDE_HEIGHT}px`,
-            maxWidth: `${SLIDE_WIDTH}px`,
-          }}
-        >
-          <DnDProvider>
-            <EditorContent
-              editor={editor}
-              className="h-full [&_.ProseMirror]:flex [&_.ProseMirror]:flex-col [&_.ProseMirror]:justify-center [&_.ProseMirror]:p-10 [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:h-full"
-            />
-          </DnDProvider>
-        </div>
+        <div className="w-full h-full flex-1 overflow-y-auto">
+          <div
+            className="editor-themed aspect-video w-full rounded-lg shadow relative flex items-start justify-start mx-4 my-2"
+            style={{
+              minHeight: `${SLIDE_HEIGHT}px`,
+              maxWidth: `${SLIDE_WIDTH}px`,
+            }}
+          >
+            <DnDProvider>
+              <EditorContent
+                editor={editor}
+                className="h-full w-full flex items-start justify-start [&_.ProseMirror]:flex [&_.ProseMirror]:flex-col [&_.ProseMirror]:justify-center [&_.ProseMirror]:p-10 [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:min-h-full [&_.ProseMirror]:w-full"
+              />
+            </DnDProvider>
+          </div>
 
-        {slashState.isOpen && (
-          <SlashCommandDropdown
-            commands={filteredCommands}
-            selectedIndex={selectedIndex}
-            position={slashState.position}
-            onSelect={selectCommand}
-            onHover={setSelectedIndex}
-          />
-        )}
+          {slashState.isOpen && (
+            <SlashCommandDropdown
+              commands={filteredCommands}
+              selectedIndex={selectedIndex}
+              position={slashState.position}
+              onSelect={selectCommand}
+              onHover={setSelectedIndex}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
