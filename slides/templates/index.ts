@@ -52,21 +52,21 @@ export const CatsTemplate = {
       content: `
         <h2 textAlign="left">Cat Traits</h2>
         <ul>
-            <listItem>
+            <li>
                 <p textAlign="left">Independent and self-reliant</p>
-            </listItem>
-            <listItem>
+            </li>
+            <li>
                 <p textAlign="left">Agile, graceful, and playful</p>
-            </listItem>
-            <listItem>
+            </li>
+            <li>
                 <p textAlign="left">Curious and intelligent</p>
-            </listItem>
-            <listItem>
+            </li>
+            <li>
                 <p textAlign="left">Affectionate and loyal to their owners</p>
-            </listItem>
-            <listItem>
+            </li>
+            <li>
                 <p textAlign="left">Communicate with a variety of vocalizations and body language</p>
-            </listItem>
+            </li>
         </ul>
         <p textAlign="left">These traits make cats versatile companions for many different lifestyles.</p>
         `,

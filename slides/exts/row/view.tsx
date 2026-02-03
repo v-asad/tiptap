@@ -75,10 +75,10 @@ export const RowView = (props: ReactNodeViewProps<HTMLParagraphElement>) => {
         data-node-view-content=""
         className={cn(
           "outline-none whitespace-normal",
-          "*:grid *:grid-flow-col *:grid-cols-(--grid-cols)",
-
+          "[&>div]:grid [&>div]:grid-flow-col [&>div]:grid-cols-(--grid-cols)",
+          
           // must hide resize handle for first column
-          "*:*:first:[&_#resize-handle]:hidden!",
+          "[&_.node-column:first-child_#resize-handle]:hidden!",
         )}
         // Pass grid-template-columns via CSS variable to child
         style={{ "--grid-cols": gridTemplateColumns } as React.CSSProperties}

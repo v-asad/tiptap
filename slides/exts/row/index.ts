@@ -10,7 +10,7 @@ export const RowExt = Node.create({
 
   group: "block",
 
-  atom: true,
+  atom: false,
 
   content: `${NodeName.COLUMN}+`,
 

@@ -9,7 +9,7 @@ export const ColumnExt = Node.create({
 
   group: "block",
 
-  atom: true,
+  atom: false,
 
   content: `block+`,
 
