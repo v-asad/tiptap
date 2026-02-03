@@ -13,10 +13,7 @@ export const useTiptapEditor = (options: UseTiptapEditorOptions = {}) => {
 
   const editor = useEditor({
     extensions: [...availableExtensions, ...additionalExtensions],
-    content: initialContent || {
-      type: "doc",
-      content: threeColumnLayout.content,
-    },
+    content: initialContent || threeColumnLayout.content,
     immediatelyRender: false,
   });
 

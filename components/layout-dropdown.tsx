@@ -2,7 +2,7 @@
 
 import { useSlideEditorContext } from "@/slides/ctx/use-slide-editor";
 import { layoutCategories, layouts, type SlideLayout } from "@/slides/layouts";
-import { LayoutGrid, ImageIcon, Type, Maximize } from "lucide-react";
+import { LayoutGrid, ImageIcon, Type, Maximize, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import {
   Dialog,
@@ -17,6 +17,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   text: <Type className="size-4" />,
   image: <ImageIcon className="size-4" />,
   "full-image": <Maximize className="size-4" />,
+  charts: <BarChart3 className="size-4" />,
 };
 
 export function LayoutDropdown() {
@@ -27,10 +28,7 @@ export function LayoutDropdown() {
   const handleSelectLayout = (layout: SlideLayout) => {
     if (!editor) return;
 
-    editor.commands.setContent({
-      type: "doc",
-      content: layout.content,
-    });
+    editor.commands.setContent(layout.content);
 
     setCurrentLayout(layout);
     setIsOpen(false);

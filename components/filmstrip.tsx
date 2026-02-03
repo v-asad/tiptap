@@ -22,10 +22,7 @@ export const Filmstrip: React.FC = () => {
   const { editor } = useSlideEditorContext();
 
   const handleAddSlide = () => {
-    const newContent = {
-      type: "doc",
-      content: titleLayout.content,
-    };
+    const newContent = titleLayout.content;
 
     flushSync(() => addSlide(newContent));
     editor?.commands.setContent(newContent);

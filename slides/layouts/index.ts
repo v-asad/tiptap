@@ -1,18 +1,18 @@
 /**
  * Slide Layouts Module
  *
- * This module exports predefined slide layouts as JavaScript objects
+ * This module exports predefined slide layouts as HTML strings
  * that can be inserted into Tiptap via `editor.commands.insertContent()`.
  *
- * Each layout follows the Tiptap JSON node structure:
- * - `type`: The node type name (e.g., "heading", "paragraph", "row", "column")
- * - `attrs`: Optional attributes for the node (e.g., { level: 1 } for headings)
- * - `content`: An array of child nodes or text nodes
- *
- * Text nodes have the structure: { type: "text", text: "content" }
+ * Each layout uses the same tag names as the Tiptap schema:
+ * - `h1`-`h6` for headings
+ * - `p` for paragraphs
+ * - `row` / `column` for layout primitives
+ * - `img` for images (with `layout` attr)
+ * - `chart` for chart nodes (with `data-chart-type` and `data-chart`)
  */
 
-import type { JSONContent } from "@tiptap/react";
+import type { Content } from "@tiptap/react";
 
 // ============================================================================
 // Types
@@ -25,8 +25,8 @@ export interface SlideLayout {
   name: string;
   /** Optional description explaining the layout's purpose */
   description?: string;
-  /** The Tiptap-compatible content structure */
-  content: JSONContent[];
+  /** The Tiptap-compatible HTML content string */
+  content: string;
 }
 
 // ============================================================================
@@ -36,37 +36,38 @@ export interface SlideLayout {
 /**
  * Creates a text node with the given content
  */
-const text = (content: string): JSONContent => ({
-  type: "text",
-  text: content,
-});
+const escapeHtml = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+
+const escapeAttr = (value: string) => escapeHtml(value);
+
+const text = (content: string): string => escapeHtml(content);
+
+const wrap = (...parts: string[]): string => parts.join("");
 
 /**
  * Creates a heading node with specified level and text
  * @param level - Heading level (1-6)
  * @param content - Text content for the heading
  */
-const heading = (level: number, content: string): JSONContent => ({
-  type: "heading",
-  attrs: { level },
-  content: [text(content)],
-});
+const heading = (level: number, content: string): string =>
+  `<h${level}>${text(content)}</h${level}>`;
 
 /**
  * Creates a paragraph node with the given text
  * @param content - Text content for the paragraph
  */
-const paragraph = (content: string): JSONContent => ({
-  type: "paragraph",
-  content: [text(content)],
-});
+const paragraph = (content: string): string => `<p>${text(content)}</p>`;
 
 /**
  * Creates an empty paragraph node (useful for spacing or placeholders)
  */
-const emptyParagraph = (): JSONContent => ({
-  type: "paragraph",
-});
+const emptyParagraph = (): string => `<p></p>`;
 
 type ImageLayout =
   | "default"
@@ -97,10 +98,10 @@ const defaultChartData: ChartDatum[] = [
 const image = (
   src: string | null = null,
   layout: ImageLayout = "default",
-): JSONContent => ({
-  type: "image",
-  attrs: { src, layout },
-});
+): string => {
+  const srcAttr = src ? ` src="${escapeAttr(src)}"` : "";
+  return `<img${srcAttr} layout="${layout}">`;
+};
 
 /**
  * Creates a chart node with specified type and data
@@ -110,62 +111,47 @@ const image = (
 const chart = (
   chartType: ChartType = "bar",
   data: ChartDatum[] = defaultChartData,
-): JSONContent => ({
-  type: "chart",
-  attrs: { chartType, data },
-});
+): string => {
+  const dataAttr = escapeAttr(JSON.stringify(data));
+  return `<chart data-chart-type="${chartType}" data-chart="${dataAttr}"></chart>`;
+};
 
 /**
  * Creates a column node containing the specified block nodes
  * @param children - Array of block nodes (headings, paragraphs, etc.)
  */
-const column = (...children: JSONContent[]): JSONContent => ({
-  type: "column",
-  content: children,
-});
+const column = (...children: string[]): string =>
+  `<column>${children.join("")}</column>`;
 
 /**
  * Creates a row node containing the specified columns
  * Note: Maximum of 4 columns per row (enforced by ROW_CONFIG.MAX_COL_COUNT)
  * @param columns - Array of column nodes
  */
-const row = (...columns: JSONContent[]): JSONContent => ({
-  type: "row",
-  attrs: {
-    // Set equal widths for all columns (1fr each)
-    columnWidths: columns.map(() => 1),
-  },
-  content: columns,
-});
+const row = (...columns: string[]): string =>
+  `<row>${columns.join("")}</row>`;
 
 /**
  * Creates a list item node with optional text content
  * @param content - Text content for the list item (creates a paragraph inside)
  */
-const listItem = (content: string): JSONContent => ({
-  type: "listItem",
-  content: [paragraph(content)],
-});
+const listItem = (content: string): string =>
+  `<li>${paragraph(content)}</li>`;
 
 /**
  * Creates a bullet list node with the specified items
  * @param items - Array of strings for each list item
  */
-const bulletList = (...items: string[]): JSONContent => ({
-  type: "bulletList",
-  content: items.map((item) => listItem(item)),
-});
+const bulletList = (...items: string[]): string =>
+  `<ul>${items.map((item) => listItem(item)).join("")}</ul>`;
 
 /**
  * Creates an ordered list node with the specified items
  * @param items - Array of strings for each list item
  * @param start - Starting number for the list (default: 1)
  */
-const orderedList = (items: string[], start: number = 1): JSONContent => ({
-  type: "orderedList",
-  attrs: { start },
-  content: items.map((item) => listItem(item)),
-});
+const orderedList = (items: string[], start: number = 1): string =>
+  `<ol start="${start}">${items.map((item) => listItem(item)).join("")}</ol>`;
 
 // ============================================================================
 // Predefined Layouts
@@ -185,12 +171,12 @@ const titleLayout: SlideLayout = {
   id: "title",
   name: "Title",
   description: "A title heading with a description paragraph below",
-  content: [
+  content: wrap(
     // Main title - uses level 1 heading for maximum prominence
     heading(1, "Slide Title"),
     // Description paragraph below the title
     paragraph("Add your description or subtitle here"),
-  ],
+  ),
 };
 
 /**
@@ -206,10 +192,10 @@ const titleOnlyLayout: SlideLayout = {
   id: "title-only",
   name: "Title Only",
   description: "A single prominent title heading",
-  content: [
+  content: wrap(
     // Single heading for maximum impact
     heading(1, "Slide Title"),
-  ],
+  ),
 };
 
 /**
@@ -228,7 +214,7 @@ const twoColumnLayout: SlideLayout = {
   id: "two-column",
   name: "Two Columns",
   description: "A title with two equal columns below",
-  content: [
+  content: wrap(
     // Main section heading
     heading(1, "Section Title"),
     // Row containing two columns with equal widths
@@ -244,7 +230,7 @@ const twoColumnLayout: SlideLayout = {
         paragraph("Add content for the second column here"),
       ),
     ),
-  ],
+  ),
 };
 
 /**
@@ -264,7 +250,7 @@ const threeColumnLayout: SlideLayout = {
   id: "three-column",
   name: "Three Columns",
   description: "A title with three equal columns below",
-  content: [
+  content: wrap(
     // Main section heading
     heading(1, "Section Title"),
     // Row containing three columns
@@ -273,7 +259,7 @@ const threeColumnLayout: SlideLayout = {
       column(heading(2, "Column 2"), paragraph("Second column content")),
       column(heading(2, "Column 3"), paragraph("Third column content")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -291,7 +277,7 @@ const fourColumnLayout: SlideLayout = {
   id: "four-column",
   name: "Four Columns",
   description: "A title with four equal columns below (maximum)",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(heading(3, "Point 1"), paragraph("Description")),
@@ -299,7 +285,7 @@ const fourColumnLayout: SlideLayout = {
       column(heading(3, "Point 3"), paragraph("Description")),
       column(heading(3, "Point 4"), paragraph("Description")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -316,13 +302,13 @@ const contentLayout: SlideLayout = {
   id: "content",
   name: "Content",
   description: "A title with multiple paragraphs below",
-  content: [
+  content: wrap(
     heading(1, "Content Title"),
     paragraph("First paragraph of content. Add your main points here."),
     paragraph(
       "Second paragraph with additional details or supporting information.",
     ),
-  ],
+  ),
 };
 
 /**
@@ -341,7 +327,7 @@ const twoColumnTextLayout: SlideLayout = {
   id: "two-column-text",
   name: "Two Column Text",
   description: "A title with two text columns (no column headings)",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(
@@ -355,7 +341,7 @@ const twoColumnTextLayout: SlideLayout = {
         ),
       ),
     ),
-  ],
+  ),
 };
 
 /**
@@ -375,7 +361,7 @@ const sidebarLayout: SlideLayout = {
   id: "sidebar",
   name: "Content with Sidebar",
   description: "Main content area with a sidebar column",
-  content: [
+  content: wrap(
     heading(1, "Main Topic"),
     row(
       // Main content column
@@ -392,7 +378,7 @@ const sidebarLayout: SlideLayout = {
         paragraph("Quick facts, notes, or supplementary information."),
       ),
     ),
-  ],
+  ),
 };
 
 /**
@@ -408,10 +394,10 @@ const blankLayout: SlideLayout = {
   id: "blank",
   name: "Blank",
   description: "An empty slide to start from scratch",
-  content: [
+  content: wrap(
     // Single empty paragraph as a starting point
     emptyParagraph(),
-  ],
+  ),
 };
 
 // ============================================================================
@@ -432,12 +418,12 @@ const imageAndTextLayout: SlideLayout = {
   id: "image-and-text",
   name: "Image and Text",
   description: "Image on the left, text on the right",
-  content: [
+  content: wrap(
     row(
       column(image()),
       column(heading(2, "Title"), paragraph("Add your description here")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -454,12 +440,12 @@ const textAndImageLayout: SlideLayout = {
   id: "text-and-image",
   name: "Text and Image",
   description: "Text on the left, image on the right",
-  content: [
+  content: wrap(
     row(
       column(heading(2, "Title"), paragraph("Add your description here")),
       column(image()),
     ),
-  ],
+  ),
 };
 
 /**
@@ -477,7 +463,7 @@ const titleTextImageLayout: SlideLayout = {
   id: "title-text-image",
   name: "Title with Text and Image",
   description: "A title with text on the left and image on the right",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(
@@ -487,7 +473,7 @@ const titleTextImageLayout: SlideLayout = {
       ),
       column(image()),
     ),
-  ],
+  ),
 };
 
 /**
@@ -505,13 +491,13 @@ const twoImageColumnsLayout: SlideLayout = {
   id: "two-image-columns",
   name: "2 Image Columns",
   description: "Title with two image-text columns",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(image(), heading(3, "Caption 1"), paragraph("Description")),
       column(image(), heading(3, "Caption 2"), paragraph("Description")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -528,14 +514,14 @@ const threeImageColumnsLayout: SlideLayout = {
   id: "three-image-columns",
   name: "3 Image Columns",
   description: "Title with three image-text columns",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(image(), heading(3, "Caption 1"), paragraph("Description")),
       column(image(), heading(3, "Caption 2"), paragraph("Description")),
       column(image(), heading(3, "Caption 3"), paragraph("Description")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -552,7 +538,7 @@ const fourImageColumnsLayout: SlideLayout = {
   id: "four-image-columns",
   name: "4 Image Columns",
   description: "Title with four image-text columns",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(image(), heading(3, "Caption 1"), paragraph("Description")),
@@ -560,7 +546,7 @@ const fourImageColumnsLayout: SlideLayout = {
       column(image(), heading(3, "Caption 3"), paragraph("Description")),
       column(image(), heading(3, "Caption 4"), paragraph("Description")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -577,7 +563,7 @@ const imageGalleryLayout: SlideLayout = {
   id: "image-gallery",
   name: "Image Gallery",
   description: "Title with three images in a row",
-  content: [heading(1, "Gallery Title"), row(column(image()), column(image()), column(image()))],
+  content: wrap(heading(1, "Gallery Title"), row(column(image()), column(image()), column(image()))),
 };
 
 // ============================================================================
@@ -598,11 +584,11 @@ const imageTopLayout: SlideLayout = {
   id: "image-top",
   name: "Image Top",
   description: "Full-width image at top with content below",
-  content: [
+  content: wrap(
     image(null, "full-top"),
     heading(2, "Title"),
     paragraph("Add your description here"),
-  ],
+  ),
 };
 
 /**
@@ -619,11 +605,11 @@ const imageBottomLayout: SlideLayout = {
   id: "image-bottom",
   name: "Image Bottom",
   description: "Content at top with full-width image below",
-  content: [
+  content: wrap(
     heading(2, "Title"),
     paragraph("Add your description here"),
     image(null, "full-bottom"),
-  ],
+  ),
 };
 
 /**
@@ -639,12 +625,12 @@ const fullImageLeftLayout: SlideLayout = {
   id: "full-image-left",
   name: "Full Image Left",
   description: "Full-height image on left, content on right",
-  content: [
+  content: wrap(
     image(null, "full-left"),
     heading(1, "Title"),
     paragraph("Add your main content here."),
     paragraph("Additional details can go in this paragraph."),
-  ],
+  ),
 };
 
 /**
@@ -660,12 +646,12 @@ const fullImageRightLayout: SlideLayout = {
   id: "full-image-right",
   name: "Full Image Right",
   description: "Content on left, full-height image on right",
-  content: [
+  content: wrap(
     image(null, "full-right"),
     heading(1, "Title"),
     paragraph("Add your main content here."),
     paragraph("Additional details can go in this paragraph."),
-  ],
+  ),
 };
 
 /**
@@ -682,14 +668,14 @@ const imageHeaderLayout: SlideLayout = {
   id: "image-header",
   name: "Image Header",
   description: "Full-width image header with title and columns",
-  content: [
+  content: wrap(
     image(null, "full-top"),
     heading(1, "Section Title"),
     row(
       column(paragraph("Left column content")),
       column(paragraph("Right column content")),
     ),
-  ],
+  ),
 };
 
 /**
@@ -706,14 +692,14 @@ const imageFooterLayout: SlideLayout = {
   id: "image-footer",
   name: "Image Footer",
   description: "Title and columns with full-width image footer",
-  content: [
+  content: wrap(
     heading(1, "Section Title"),
     row(
       column(paragraph("Left column content")),
       column(paragraph("Right column content")),
     ),
     image(null, "full-bottom"),
-  ],
+  ),
 };
 
 /**
@@ -729,10 +715,10 @@ const quoteLayout: SlideLayout = {
   id: "quote",
   name: "Quote",
   description: "A prominent quote with attribution",
-  content: [
+  content: wrap(
     heading(2, '"Your inspiring quote goes here"'),
     paragraph("— Author Name"),
-  ],
+  ),
 };
 
 // ============================================================================
@@ -752,14 +738,14 @@ const bulletListLayout: SlideLayout = {
   id: "bullet-list",
   name: "Bullet List",
   description: "A title with bullet points",
-  content: [
+  content: wrap(
     heading(1, "Key Points"),
     bulletList(
       "First important point",
       "Second important point",
       "Third important point",
     ),
-  ],
+  ),
 };
 
 /**
@@ -775,14 +761,14 @@ const numberedListLayout: SlideLayout = {
   id: "numbered-list",
   name: "Numbered List",
   description: "A title with numbered steps",
-  content: [
+  content: wrap(
     heading(1, "Steps to Follow"),
     orderedList([
       "First step in the process",
       "Second step in the process",
       "Third step in the process",
     ]),
-  ],
+  ),
 };
 
 /**
@@ -800,7 +786,7 @@ const twoColumnListLayout: SlideLayout = {
   id: "two-column-list",
   name: "Two Column List",
   description: "Two columns with bullet lists",
-  content: [
+  content: wrap(
     heading(1, "Comparison"),
     row(
       column(
@@ -812,7 +798,7 @@ const twoColumnListLayout: SlideLayout = {
         bulletList("Disadvantage one", "Disadvantage two", "Disadvantage three"),
       ),
     ),
-  ],
+  ),
 };
 
 /**
@@ -829,7 +815,7 @@ const contentWithListLayout: SlideLayout = {
   id: "content-with-list",
   name: "Content with List",
   description: "Paragraph text followed by bullet points",
-  content: [
+  content: wrap(
     heading(1, "Overview"),
     paragraph(
       "Here is an introduction to the topic. This paragraph provides context for the points below.",
@@ -839,7 +825,7 @@ const contentWithListLayout: SlideLayout = {
       "Supporting point two",
       "Supporting point three",
     ),
-  ],
+  ),
 };
 
 /**
@@ -856,7 +842,7 @@ const imageAndListLayout: SlideLayout = {
   id: "image-and-list",
   name: "Image and List",
   description: "Image on left, bullet list on right",
-  content: [
+  content: wrap(
     row(
       column(image()),
       column(
@@ -864,7 +850,7 @@ const imageAndListLayout: SlideLayout = {
         bulletList("Feature one", "Feature two", "Feature three"),
       ),
     ),
-  ],
+  ),
 };
 
 /**
@@ -880,7 +866,7 @@ const agendaLayout: SlideLayout = {
   id: "agenda",
   name: "Agenda",
   description: "Meeting agenda or presentation outline",
-  content: [
+  content: wrap(
     heading(1, "Agenda"),
     orderedList([
       "Introduction and welcome",
@@ -889,7 +875,7 @@ const agendaLayout: SlideLayout = {
       "Action items and next steps",
       "Q&A and closing",
     ]),
-  ],
+  ),
 };
 
 /**
@@ -905,7 +891,7 @@ const sectionHeaderLayout: SlideLayout = {
   id: "section-header",
   name: "Section Header",
   description: "A section divider with title and subtitle",
-  content: [heading(3, "Section 01"), heading(1, "Section Title")],
+  content: wrap(heading(3, "Section 01"), heading(1, "Section Title")),
 };
 
 /**
@@ -917,7 +903,7 @@ const lineChartLayout: SlideLayout = {
   id: "line-chart",
   name: "Line Chart",
   description: "A title with a line chart",
-  content: [heading(1, "Performance Over Time"), chart("line")],
+  content: wrap(heading(1, "Performance Over Time"), chart("line")),
 };
 
 /**
@@ -929,7 +915,7 @@ const barChartLayout: SlideLayout = {
   id: "bar-chart",
   name: "Bar Chart",
   description: "A title with a bar chart",
-  content: [heading(1, "Category Breakdown"), chart("bar")],
+  content: wrap(heading(1, "Category Breakdown"), chart("bar")),
 };
 
 /**
@@ -941,7 +927,7 @@ const pieChartLayout: SlideLayout = {
   id: "pie-chart",
   name: "Pie Chart",
   description: "A title with a pie chart",
-  content: [heading(1, "Share of Total"), chart("pie")],
+  content: wrap(heading(1, "Share of Total"), chart("pie")),
 };
 
 // ============================================================================
@@ -1054,7 +1040,7 @@ export const getLayoutById = (id: string): SlideLayout | undefined => {
  * ```
  */
 export const insertLayout = (
-  editor: { commands: { insertContent: (content: JSONContent[]) => boolean } },
+  editor: { commands: { insertContent: (content: Content) => boolean } },
   layoutId: string,
 ): boolean => {
   const layout = getLayoutById(layoutId);
@@ -1080,7 +1066,7 @@ export const insertLayout = (
  * ```
  */
 export const setLayout = (
-  editor: { commands: { setContent: (content: JSONContent) => boolean } },
+  editor: { commands: { setContent: (content: Content) => boolean } },
   layoutId: string,
 ): boolean => {
   const layout = getLayoutById(layoutId);
@@ -1088,11 +1074,7 @@ export const setLayout = (
     console.warn(`Layout with id "${layoutId}" not found`);
     return false;
   }
-  // Wrap content in a doc node for setContent
-  return editor.commands.setContent({
-    type: "doc",
-    content: layout.content,
-  });
+  return editor.commands.setContent(layout.content);
 };
 
 // Also export individual layouts for direct access
